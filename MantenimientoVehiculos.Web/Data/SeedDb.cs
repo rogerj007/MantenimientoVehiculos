@@ -4,16 +4,19 @@ using System.Collections.Generic;
 //using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using MantenimientoVehiculos.Web.Helpers;
 
 namespace MantenimientoVehiculos.Web.Data
 {
     public class SeedDb
     {
         private readonly DataContext _dataContext;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext dataContext)
+        public SeedDb(DataContext dataContext, IUserHelper userHelper)
         {
             _dataContext = dataContext;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
@@ -22,8 +25,40 @@ namespace MantenimientoVehiculos.Web.Data
             await CheckCountryAsync();
             await CheckColorAsync();
             await CheckFuelAsync();
-            await CheckJobTitleAsync();
+            await CheckUserTypeAsync();
             await CheckTypeVehiculeAsync();
+            await CheckStatusVehiculeAsync();
+            await CheckBrandVehiculeAsync();
+        }
+
+        private async Task CheckBrandVehiculeAsync()
+        {
+            if (!_dataContext.VehicleBrand.Any())
+            {
+                await _dataContext.VehicleBrand.AddRangeAsync(
+                    new VehicleBrandEntity { VehicleBrand = "CHEVROLET", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "KENWORTH", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "HINO MOTORS", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "TOYOTA", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "MAZDA", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "CATERPILLAR", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "KOMATSU", CreationDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { VehicleBrand = "JOHN DEERE", CreationDate = DateTime.UtcNow }
+                );
+                await _dataContext.SaveChangesAsync();
+            }
+        }
+
+        private async Task CheckStatusVehiculeAsync()
+        {
+            if (!_dataContext.VehicleStatus.Any())
+            {
+                await _dataContext.VehicleStatus.AddRangeAsync(
+                    new VehicleStatusEntity { VehicleStatus = "OPERATIVO", CreationDate = DateTime.UtcNow },
+                    new VehicleStatusEntity { VehicleStatus = "DAÑADA", CreationDate = DateTime.UtcNow }
+                );
+                await _dataContext.SaveChangesAsync();
+            }
         }
 
         private async Task CheckTypeVehiculeAsync()
@@ -44,7 +79,7 @@ namespace MantenimientoVehiculos.Web.Data
             }
         }
 
-        private async Task CheckJobTitleAsync()
+        private async Task CheckUserTypeAsync()
         {
             if (!_dataContext.UserType.Any())
             {
@@ -55,7 +90,7 @@ namespace MantenimientoVehiculos.Web.Data
                     new UserTypeEntity { UserType = "MECÁNICO", CreationDate = DateTime.UtcNow },
                     new UserTypeEntity { UserType = "AYUDANTE DE MECÁNICA", CreationDate = DateTime.UtcNow },
                     new UserTypeEntity { UserType = "SOLDADOR", CreationDate = DateTime.UtcNow },
-                    new UserTypeEntity { UserType = "AAYUDANTE SOLDADOR", CreationDate = DateTime.UtcNow },
+                    new UserTypeEntity { UserType = "AYUDANTE SOLDADOR", CreationDate = DateTime.UtcNow },
                     new UserTypeEntity { UserType = "VULCANIZADOR", CreationDate = DateTime.UtcNow },
                     new UserTypeEntity { UserType = "AYUDANTE DE VUCANIZADOR", CreationDate = DateTime.UtcNow }
                 );

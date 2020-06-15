@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MantenimientoVehiculos.Web.Data;
+using MantenimientoVehiculos.Web.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,8 +38,8 @@ namespace MantenimientoVehiculos.Web
             {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddScoped<IUserHelper, UserHelper>();
             services.AddTransient<SeedDb>();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

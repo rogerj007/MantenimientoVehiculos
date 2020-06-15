@@ -107,6 +107,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
+                    var brand = _context.VehicleBrand.FirstOrDefaultAsync(b=>b.Id.Equals(id));
+                    brand.Result.VehicleBrand = vehicleBrandEntity.VehicleBrand;
+                    brand.Result.ModificationDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();

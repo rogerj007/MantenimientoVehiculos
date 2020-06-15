@@ -20,17 +20,17 @@
             @Html.DisplayNameFor(model => model.CreationDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.CreationDate)
+            @Html.DisplayFor(model => model.CreationDateLocal)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.ModificationDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ModificationDate)
+            @Html.DisplayFor(model => model.ModificationDateLocal)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index" class="btn btn-success">Back to List</a>
 </div>
