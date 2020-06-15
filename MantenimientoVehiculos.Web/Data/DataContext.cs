@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MantenimientoVehiculos.Web.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext :IdentityUserContext<UserEntity> //DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -28,8 +29,8 @@ namespace MantenimientoVehiculos.Web.Data
                 .HasIndex(t => t.Fuel)
                 .IsUnique();
 
-            builder.Entity<JobTitleEntity>()
-                .HasIndex(t => t.JobTitle)
+            builder.Entity<UserTypeEntity>()
+                .HasIndex(t => t.UserType)
                 .IsUnique();
 
             builder.Entity<TypeVehicleEntity>()
@@ -49,7 +50,7 @@ namespace MantenimientoVehiculos.Web.Data
         public DbSet<ColorEntity> Colors { get; set; }
         public DbSet<CountryEntity> Country { get; set; }
         public DbSet<FuelEntity> Fuel { get; set; }
-        public DbSet<JobTitleEntity> JobTitle { get; set; }
+        public DbSet<UserTypeEntity> UserType { get; set; }
         public DbSet<TypeVehicleEntity> TypeVehicle { get; set; }
         public DbSet<VehicleBrandEntity> VehicleBrand { get; set; }
         public DbSet<VehicleEntity> Vehicle { get; set; }

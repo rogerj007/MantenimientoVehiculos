@@ -60,8 +60,20 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 fuelEntity.Fuel = fuelEntity.Fuel.ToUpper();
                 _context.Add(fuelEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException != null)
+                        ModelState.AddModelError(string.Empty,
+                            e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                ? "Already exists name on database"
+                                : e.InnerException.Message);
+                }
+                
             }
             return View(fuelEntity);
         }
@@ -101,7 +113,19 @@ namespace MantenimientoVehiculos.Web.Controllers
                     var fuel = _context.Fuel.FirstOrDefaultAsync(f => f.Id.Equals(id));
                     fuel.Result.Fuel = fuel.Result.Fuel.ToUpper();
                     fuel.Result.ModificationDate = DateTime.UtcNow;
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.InnerException != null)
+                            ModelState.AddModelError(string.Empty,
+                                e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                    ? "Already exists name on database"
+                                    : e.InnerException.Message);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -114,7 +138,6 @@ namespace MantenimientoVehiculos.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(fuelEntity);
         }

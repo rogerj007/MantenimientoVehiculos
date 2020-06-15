@@ -10,22 +10,22 @@ using MantenimientoVehiculos.Web.Data.Entities;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
-    public class CountryController : Controller
+    public class TypeVehicleController : Controller
     {
         private readonly DataContext _context;
 
-        public CountryController(DataContext context)
+        public TypeVehicleController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: Country
+        // GET: TypeVehicle
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Country.ToListAsync());
+            return View(await _context.TypeVehicle.ToListAsync());
         }
 
-        // GET: Country/Details/5
+        // GET: TypeVehicle/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +33,36 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country
+            var typeVehicleEntity = await _context.TypeVehicle
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (countryEntity == null)
+            if (typeVehicleEntity == null)
             {
                 return NotFound();
             }
 
-            return View(countryEntity);
+            return View(typeVehicleEntity);
         }
 
-        // GET: Country/Create
+        // GET: TypeVehicle/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Country/Create
+        // POST: TypeVehicle/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CountryEntity countryEntity)
+        public async Task<IActionResult> Create(TypeVehicleEntity typeVehicleEntity)
         {
             if (ModelState.IsValid)
             {
-                countryEntity.Country = countryEntity.Country.ToUpper();
-                _context.Add(countryEntity);
+                _context.Add(typeVehicleEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-
                 }
                 catch (Exception e)
                 {
@@ -74,11 +72,12 @@ namespace MantenimientoVehiculos.Web.Controllers
                                 ? "Already exists name on database"
                                 : e.InnerException.Message);
                 }
+              
             }
-            return View(countryEntity);
+            return View(typeVehicleEntity);
         }
 
-        // GET: Country/Edit/5
+        // GET: TypeVehicle/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,22 +85,22 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country.FindAsync(id);
-            if (countryEntity == null)
+            var typeVehicleEntity = await _context.TypeVehicle.FindAsync(id);
+            if (typeVehicleEntity == null)
             {
                 return NotFound();
             }
-            return View(countryEntity);
+            return View(typeVehicleEntity);
         }
 
-        // POST: Country/Edit/5
+        // POST: TypeVehicle/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CountryEntity countryEntity)
+        public async Task<IActionResult> Edit(int id, TypeVehicleEntity typeVehicleEntity)
         {
-            if (id != countryEntity.Id)
+            if (id != typeVehicleEntity.Id)
             {
                 return NotFound();
             }
@@ -110,9 +109,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    country.Result.Country = countryEntity.Country.ToUpper();
-                    country.Result.ModificationDate = DateTime.UtcNow;
+                    var typeVehicle = _context.TypeVehicle.FirstOrDefaultAsync(tv => tv.Id.Equals(id));
+                    typeVehicle.Result.ModificationDate = DateTime.UtcNow;
+                    typeVehicle.Result.TypeVehicle = typeVehicle.Result.TypeVehicle.ToUpper();
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -129,19 +128,21 @@ namespace MantenimientoVehiculos.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CountryEntityExists(countryEntity.Id))
+                    if (!TypeVehicleEntityExists(typeVehicleEntity.Id))
                     {
                         return NotFound();
                     }
-
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
-              
+                
             }
-            return View(countryEntity);
+            return View(typeVehicleEntity);
         }
 
-        // GET: Country/Delete/5
+        // GET: TypeVehicle/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,23 +150,21 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country
+            var typeVehicleEntity = await _context.TypeVehicle
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (countryEntity == null)
+            if (typeVehicleEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Country.Remove(countryEntity);
+            _context.TypeVehicle.Remove(typeVehicleEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-       
-
-        private bool CountryEntityExists(int id)
+        private bool TypeVehicleEntityExists(int id)
         {
-            return _context.Country.Any(e => e.Id == id);
+            return _context.TypeVehicle.Any(e => e.Id == id);
         }
     }
 }

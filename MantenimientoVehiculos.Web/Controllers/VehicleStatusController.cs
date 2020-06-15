@@ -10,22 +10,22 @@ using MantenimientoVehiculos.Web.Data.Entities;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
-    public class CountryController : Controller
+    public class VehicleStatusController : Controller
     {
         private readonly DataContext _context;
 
-        public CountryController(DataContext context)
+        public VehicleStatusController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: Country
+        // GET: VehicleStatus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Country.ToListAsync());
+            return View(await _context.VehicleStatus.ToListAsync());
         }
 
-        // GET: Country/Details/5
+        // GET: VehicleStatus/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +33,37 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country
+            var vehicleStatusEntity = await _context.VehicleStatus
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (countryEntity == null)
+            if (vehicleStatusEntity == null)
             {
                 return NotFound();
             }
 
-            return View(countryEntity);
+            return View(vehicleStatusEntity);
         }
 
-        // GET: Country/Create
+        // GET: VehicleStatus/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Country/Create
+        // POST: VehicleStatus/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CountryEntity countryEntity)
+        public async Task<IActionResult> Create(VehicleStatusEntity vehicleStatusEntity)
         {
             if (ModelState.IsValid)
             {
-                countryEntity.Country = countryEntity.Country.ToUpper();
-                _context.Add(countryEntity);
+                vehicleStatusEntity.VehicleStatus = vehicleStatusEntity.VehicleStatus.ToUpper();
+                _context.Add(vehicleStatusEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-
                 }
                 catch (Exception e)
                 {
@@ -75,10 +74,10 @@ namespace MantenimientoVehiculos.Web.Controllers
                                 : e.InnerException.Message);
                 }
             }
-            return View(countryEntity);
+            return View(vehicleStatusEntity);
         }
 
-        // GET: Country/Edit/5
+        // GET: VehicleStatus/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,22 +85,22 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country.FindAsync(id);
-            if (countryEntity == null)
+            var vehicleStatusEntity = await _context.VehicleStatus.FindAsync(id);
+            if (vehicleStatusEntity == null)
             {
                 return NotFound();
             }
-            return View(countryEntity);
+            return View(vehicleStatusEntity);
         }
 
-        // POST: Country/Edit/5
+        // POST: VehicleStatus/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CountryEntity countryEntity)
+        public async Task<IActionResult> Edit(int id, VehicleStatusEntity vehicleStatusEntity)
         {
-            if (id != countryEntity.Id)
+            if (id != vehicleStatusEntity.Id)
             {
                 return NotFound();
             }
@@ -110,9 +109,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    country.Result.Country = countryEntity.Country.ToUpper();
-                    country.Result.ModificationDate = DateTime.UtcNow;
+                    var status = _context.VehicleStatus.FirstOrDefaultAsync(s => s.Id.Equals(id));
+                    status.Result.ModificationDate = vehicleStatusEntity.ModificationDate;
+                    status.Result.VehicleStatus = vehicleStatusEntity.VehicleStatus.ToUpper();
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -126,22 +125,21 @@ namespace MantenimientoVehiculos.Web.Controllers
                                     ? "Already exists name on database"
                                     : e.InnerException.Message);
                     }
+                   
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CountryEntityExists(countryEntity.Id))
+                    if (!VehicleStatusEntityExists(vehicleStatusEntity.Id))
                     {
                         return NotFound();
                     }
-
-                    throw;
                 }
-              
+                
             }
-            return View(countryEntity);
+            return View(vehicleStatusEntity);
         }
 
-        // GET: Country/Delete/5
+        // GET: VehicleStatus/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,23 +147,21 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country
+            var vehicleStatusEntity = await _context.VehicleStatus
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (countryEntity == null)
+            if (vehicleStatusEntity == null)
             {
                 return NotFound();
             }
-
-            _context.Country.Remove(countryEntity);
+            _context.VehicleStatus.Remove(vehicleStatusEntity);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(vehicleStatusEntity);
         }
 
-       
 
-        private bool CountryEntityExists(int id)
+        private bool VehicleStatusEntityExists(int id)
         {
-            return _context.Country.Any(e => e.Id == id);
+            return _context.VehicleStatus.Any(e => e.Id == id);
         }
     }
 }

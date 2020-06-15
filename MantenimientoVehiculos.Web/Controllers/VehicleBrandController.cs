@@ -1,31 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
-    public class CountryController : Controller
+    public class VehicleBrandController : Controller
     {
         private readonly DataContext _context;
 
-        public CountryController(DataContext context)
+        public VehicleBrandController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: Country
+        // GET: VehicleBrand
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Country.ToListAsync());
+            return View(await _context.VehicleBrand.ToListAsync());
         }
 
-        // GET: Country/Details/5
+        // GET: VehicleBrand/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +31,37 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country
+            var vehicleBrandEntity = await _context.VehicleBrand
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (countryEntity == null)
+            if (vehicleBrandEntity == null)
             {
                 return NotFound();
             }
 
-            return View(countryEntity);
+            return View(vehicleBrandEntity);
         }
 
-        // GET: Country/Create
+        // GET: VehicleBrand/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Country/Create
+        // POST: VehicleBrand/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CountryEntity countryEntity)
+        public async Task<IActionResult> Create(VehicleBrandEntity vehicleBrandEntity)
         {
             if (ModelState.IsValid)
             {
-                countryEntity.Country = countryEntity.Country.ToUpper();
-                _context.Add(countryEntity);
+                vehicleBrandEntity.VehicleBrand = vehicleBrandEntity.VehicleBrand.ToUpper();
+                _context.Add(vehicleBrandEntity);
                 try
                 {
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-
                 }
                 catch (Exception e)
                 {
@@ -75,10 +72,10 @@ namespace MantenimientoVehiculos.Web.Controllers
                                 : e.InnerException.Message);
                 }
             }
-            return View(countryEntity);
+            return View(vehicleBrandEntity);
         }
 
-        // GET: Country/Edit/5
+        // GET: VehicleBrand/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,22 +83,22 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country.FindAsync(id);
-            if (countryEntity == null)
+            var vehicleBrandEntity = await _context.VehicleBrand.FindAsync(id);
+            if (vehicleBrandEntity == null)
             {
                 return NotFound();
             }
-            return View(countryEntity);
+            return View(vehicleBrandEntity);
         }
 
-        // POST: Country/Edit/5
+        // POST: VehicleBrand/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CountryEntity countryEntity)
+        public async Task<IActionResult> Edit(int id,  VehicleBrandEntity vehicleBrandEntity)
         {
-            if (id != countryEntity.Id)
+            if (id != vehicleBrandEntity.Id)
             {
                 return NotFound();
             }
@@ -110,9 +107,6 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    country.Result.Country = countryEntity.Country.ToUpper();
-                    country.Result.ModificationDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -129,19 +123,20 @@ namespace MantenimientoVehiculos.Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CountryEntityExists(countryEntity.Id))
+                    if (!VehicleBrandEntityExists(vehicleBrandEntity.Id))
                     {
                         return NotFound();
                     }
-
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
-              
             }
-            return View(countryEntity);
+            return View(vehicleBrandEntity);
         }
 
-        // GET: Country/Delete/5
+        // GET: VehicleBrand/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -149,23 +144,21 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var countryEntity = await _context.Country
+            var vehicleBrandEntity = await _context.VehicleBrand
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (countryEntity == null)
+            if (vehicleBrandEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Country.Remove(countryEntity);
+            _context.VehicleBrand.Remove(vehicleBrandEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-       
-
-        private bool CountryEntityExists(int id)
+        private bool VehicleBrandEntityExists(int id)
         {
-            return _context.Country.Any(e => e.Id == id);
+            return _context.VehicleBrand.Any(e => e.Id == id);
         }
     }
 }

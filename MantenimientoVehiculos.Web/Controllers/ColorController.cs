@@ -58,11 +58,22 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 colorEntity.Color = colorEntity.Color.ToUpper();
-               // colorEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(colorEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException != null)
+                        ModelState.AddModelError(string.Empty,
+                            e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                ? "Already exists name on database"
+                                : e.InnerException.Message);
+                }
             }
             return View(colorEntity);
         }
@@ -102,8 +113,19 @@ namespace MantenimientoVehiculos.Web.Controllers
                     var color = _context.Colors.SingleOrDefaultAsync(c => c.Id.Equals(id));
                     color.Result.Color= colorEntity.Color.ToUpper();
                     color.Result.ModificationDate = DateTime.UtcNow;
-                    //_context.Update(colorEntity);
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.InnerException != null)
+                            ModelState.AddModelError(string.Empty,
+                                e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                    ? "Already exists row"
+                                    : e.InnerException.Message);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -114,7 +136,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
                     throw;
                 }
-                return RedirectToAction(nameof(Index));
+               
             }
             return View(colorEntity);
         }
