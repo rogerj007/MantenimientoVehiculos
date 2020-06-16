@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Data
 {
-    public class DataContext :IdentityUserContext<UserEntity> //DbContext
+    public class DataContext :DbContext //IdentityUserContext<UserEntity> //
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -47,7 +47,7 @@ namespace MantenimientoVehiculos.Web.Data
         }
 
 
-        public DbSet<ColorEntity> Colors { get; set; }
+        public DbSet<ColorEntity> Color { get; set; }
         public DbSet<CountryEntity> Country { get; set; }
         public DbSet<FuelEntity> Fuel { get; set; }
         public DbSet<UserTypeEntity> UserType { get; set; }

@@ -22,7 +22,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // GET: Color
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Colors.ToListAsync());
+            return View(await _context.Color.ToListAsync());
         }
 
         // GET: Color/Details/5
@@ -33,7 +33,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var colorEntity = await _context.Colors
+            var colorEntity = await _context.Color
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (colorEntity == null)
             {
@@ -86,7 +86,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var colorEntity = await _context.Colors.FindAsync(id);
+            var colorEntity = await _context.Color.FindAsync(id);
             if (colorEntity == null)
             {
                 return NotFound();
@@ -110,7 +110,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var color = _context.Colors.SingleOrDefaultAsync(c => c.Id.Equals(id));
+                    var color = _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
                     color.Result.Color= colorEntity.Color.ToUpper();
                     color.Result.ModificationDate = DateTime.UtcNow;
                     try
@@ -149,14 +149,14 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var colorEntity = await _context.Colors
+            var colorEntity = await _context.Color
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (colorEntity == null)
             {
                 return NotFound();
             }
 
-            _context.Colors.Remove(colorEntity);
+            _context.Color.Remove(colorEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
             //  return View(colorEntity);
@@ -164,7 +164,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
         private bool ColorEntityExists(int id)
         {
-            return _context.Colors.Any(e => e.Id == id);
+            return _context.Color.Any(e => e.Id == id);
         }
     }
 }

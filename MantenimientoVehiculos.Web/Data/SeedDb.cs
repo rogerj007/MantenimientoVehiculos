@@ -11,12 +11,12 @@ namespace MantenimientoVehiculos.Web.Data
     public class SeedDb
     {
         private readonly DataContext _dataContext;
-        private readonly IUserHelper _userHelper;
+        //private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext dataContext, IUserHelper userHelper)
+        public SeedDb(DataContext dataContext)//, IUserHelper userHelper
         {
             _dataContext = dataContext;
-            _userHelper = userHelper;
+           // _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
@@ -44,6 +44,7 @@ namespace MantenimientoVehiculos.Web.Data
                     new VehicleBrandEntity { VehicleBrand = "CATERPILLAR", CreationDate = DateTime.UtcNow },
                     new VehicleBrandEntity { VehicleBrand = "KOMATSU", CreationDate = DateTime.UtcNow },
                     new VehicleBrandEntity { VehicleBrand = "JOHN DEERE", CreationDate = DateTime.UtcNow }
+
                 );
                 await _dataContext.SaveChangesAsync();
             }
@@ -55,7 +56,8 @@ namespace MantenimientoVehiculos.Web.Data
             {
                 await _dataContext.VehicleStatus.AddRangeAsync(
                     new VehicleStatusEntity { VehicleStatus = "OPERATIVO", CreationDate = DateTime.UtcNow },
-                    new VehicleStatusEntity { VehicleStatus = "DAÑADA", CreationDate = DateTime.UtcNow }
+                    new VehicleStatusEntity { VehicleStatus = "DAÑADA", CreationDate = DateTime.UtcNow },
+                    new VehicleStatusEntity { VehicleStatus = "PROCESO DE BAJA", CreationDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
             }
@@ -113,9 +115,9 @@ namespace MantenimientoVehiculos.Web.Data
         }
         private async Task CheckColorAsync()
         {
-            if (!_dataContext.Colors.Any())
+            if (!_dataContext.Color.Any())
             {
-                await _dataContext.Colors.AddRangeAsync(
+                await _dataContext.Color.AddRangeAsync(
                     new ColorEntity {Color = "RED", CreationDate = DateTime.UtcNow },
                                 new ColorEntity {Color = "BLACK", CreationDate = DateTime.UtcNow }, 
                                 new ColorEntity {Color = "BLUE", CreationDate = DateTime.UtcNow },
