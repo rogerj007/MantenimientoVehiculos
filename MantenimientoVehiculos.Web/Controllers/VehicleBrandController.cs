@@ -3,11 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class VehicleBrandController : Controller
     {
         private readonly DataContext _context;

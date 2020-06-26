@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TypeVehicleController : Controller
     {
         private readonly DataContext _context;

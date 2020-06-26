@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class UserTypeEntity
+    public class UserFunctionEntity
     {
         public int Id { get; set; }
 
         [StringLength(50, MinimumLength = 5, ErrorMessage = "The {0} field must have {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string UserType { get; set; }
+        public string UserFunction { get; set; }
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Creation Date")]

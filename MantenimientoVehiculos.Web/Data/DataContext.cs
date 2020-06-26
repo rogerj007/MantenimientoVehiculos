@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MantenimientoVehiculos.Web.Data.Entities;
+﻿using MantenimientoVehiculos.Web.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Data
 {
-    public class DataContext :DbContext //IdentityUserContext<UserEntity> //
+    public class DataContext :  IdentityDbContext<UserEntity>//DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -29,8 +25,8 @@ namespace MantenimientoVehiculos.Web.Data
                 .HasIndex(t => t.Fuel)
                 .IsUnique();
 
-            builder.Entity<UserTypeEntity>()
-                .HasIndex(t => t.UserType)
+            builder.Entity<UserFunctionEntity>()
+                .HasIndex(t => t.UserFunction)
                 .IsUnique();
 
             builder.Entity<TypeVehicleEntity>()
@@ -50,7 +46,7 @@ namespace MantenimientoVehiculos.Web.Data
         public DbSet<ColorEntity> Color { get; set; }
         public DbSet<CountryEntity> Country { get; set; }
         public DbSet<FuelEntity> Fuel { get; set; }
-        public DbSet<UserTypeEntity> UserType { get; set; }
+        public DbSet<UserFunctionEntity> UserFunction { get; set; }
         public DbSet<TypeVehicleEntity> TypeVehicle { get; set; }
         public DbSet<VehicleBrandEntity> VehicleBrand { get; set; }
         public DbSet<VehicleEntity> Vehicle { get; set; }

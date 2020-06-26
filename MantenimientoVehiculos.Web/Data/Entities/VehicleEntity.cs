@@ -59,7 +59,5 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public ColorEntity Color { get; set; }
 
-        
-
     }
 }

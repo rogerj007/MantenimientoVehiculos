@@ -7,14 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
-    public class UserTypeController : Controller
+    [Authorize(Roles = "Admin,Supervisor")]
+    public class UserFunctionController : Controller
     {
         private readonly DataContext _context;
 
-        public UserTypeController(DataContext context)
+        public UserFunctionController(DataContext context)
         {
             _context = context;
         }
@@ -22,7 +24,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // GET: JobTitle
         public async Task<IActionResult> Index()
         {
-            return View(await _context.UserType.ToListAsync());
+            return View(await _context.UserFunction.ToListAsync());
         }
 
         // GET: JobTitle/Details/5
@@ -33,7 +35,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var jobTitleEntity = await _context.UserType
+            var jobTitleEntity = await _context.UserFunction
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (jobTitleEntity == null)
             {
@@ -54,11 +56,11 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserTypeEntity jobTitleEntity)
+        public async Task<IActionResult> Create(UserFunctionEntity jobTitleEntity)
         {
             if (ModelState.IsValid)
             {
-                jobTitleEntity.UserType = jobTitleEntity.UserType.ToUpper();
+                jobTitleEntity.UserFunction = jobTitleEntity.UserFunction.ToUpper();
                 _context.Add(jobTitleEntity);
                 try
                 {
@@ -86,7 +88,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var jobTitleEntity = await _context.UserType.FindAsync(id);
+            var jobTitleEntity = await _context.UserFunction.FindAsync(id);
             if (jobTitleEntity == null)
             {
                 return NotFound();
@@ -99,7 +101,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserTypeEntity jobTitleEntity)
+        public async Task<IActionResult> Edit(int id, UserFunctionEntity jobTitleEntity)
         {
             if (id != jobTitleEntity.Id)
             {
@@ -110,8 +112,8 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var jobTitle = _context.UserType.FirstOrDefaultAsync(j => j.Id.Equals(id));
-                    jobTitle.Result.UserType = jobTitleEntity.UserType.ToUpper();
+                    var jobTitle = _context.UserFunction.FirstOrDefaultAsync(j => j.Id.Equals(id));
+                    jobTitle.Result.UserFunction = jobTitleEntity.UserFunction.ToUpper();
                     jobTitle.Result.ModificationDate = DateTime.UtcNow;
                     try
                     {
@@ -151,14 +153,14 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var jobTitleEntity = await _context.UserType
+            var jobTitleEntity = await _context.UserFunction
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (jobTitleEntity == null)
             {
                 return NotFound();
             }
 
-            _context.UserType.Remove(jobTitleEntity);
+            _context.UserFunction.Remove(jobTitleEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -166,7 +168,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
         private bool JobTitleEntityExists(int id)
         {
-            return _context.UserType.Any(e => e.Id == id);
+            return _context.UserFunction.Any(e => e.Id == id);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MantenimientoVehiculos.Web.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
@@ -26,14 +27,16 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Display(Name = "Picture")]
         public string PicturePath { get; set; }
 
+        [Display(Name = "User Function")]
+        public UserFunctionEntity UserFunction { get; set; }
+
+
         [Display(Name = "User Type")]
-        public UserTypeEntity UserType { get; set; }
+        public UserType UserType { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
 
         public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
-
-
-
+        
     }
 }
