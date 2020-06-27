@@ -107,7 +107,7 @@ namespace MantenimientoVehiculos.Web.Migrations
                     b.ToTable("JobTitle");
                 });
 
-            modelBuilder.Entity("MantenimientoVehiculos.Web.Data.Entities.TypeVehicleEntity", b =>
+            modelBuilder.Entity("MantenimientoVehiculos.Web.Data.Entities.VehicleTypeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,16 +117,16 @@ namespace MantenimientoVehiculos.Web.Migrations
 
                     b.Property<DateTime?>("ModificationDate");
 
-                    b.Property<string>("TypeVehicle")
+                    b.Property<string>("VehicleType")
                         .IsRequired()
                         .HasMaxLength(25);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeVehicle")
+                    b.HasIndex("VehicleType")
                         .IsUnique();
 
-                    b.ToTable("TypeVehicle");
+                    b.ToTable("VehicleType");
                 });
 
             modelBuilder.Entity("MantenimientoVehiculos.Web.Data.Entities.VehicleBrandEntity", b =>
@@ -181,7 +181,7 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(8);
 
-                    b.Property<int>("TypeVehicleId");
+                    b.Property<int>("VehicleTypeId");
 
                     b.Property<int>("VehicleBrandId");
 
@@ -195,7 +195,7 @@ namespace MantenimientoVehiculos.Web.Migrations
 
                     b.HasIndex("FuelId");
 
-                    b.HasIndex("TypeVehicleId");
+                    b.HasIndex("VehicleTypeId");
 
                     b.HasIndex("VehicleBrandId");
 
@@ -241,9 +241,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .HasForeignKey("FuelId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MantenimientoVehiculos.Web.Data.Entities.TypeVehicleEntity", "TypeVehicle")
+                    b.HasOne("MantenimientoVehiculos.Web.Data.Entities.VehicleTypeEntity", "VehicleType")
                         .WithMany()
-                        .HasForeignKey("TypeVehicleId")
+                        .HasForeignKey("VehicleTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("MantenimientoVehiculos.Web.Data.Entities.VehicleBrandEntity", "VehicleBrand")

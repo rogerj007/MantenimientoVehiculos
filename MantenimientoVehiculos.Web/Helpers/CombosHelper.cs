@@ -63,11 +63,11 @@ namespace MantenimientoVehiculos.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboTypeVehicle()
+        public IEnumerable<SelectListItem> GetComboVehicleType()
         {
-            var list = _context.TypeVehicle.Select(t => new SelectListItem
+            var list = _context.VehicleType.Select(t => new SelectListItem
                 {
-                    Text = t.TypeVehicle,
+                    Text = t.VehicleType,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)

@@ -112,6 +112,8 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
+                    
+
                     var jobTitle = _context.UserFunction.FirstOrDefaultAsync(j => j.Id.Equals(id));
                     jobTitle.Result.UserFunction = jobTitleEntity.UserFunction.ToUpper();
                     jobTitle.Result.ModificationDate = DateTime.UtcNow;
@@ -161,6 +163,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             }
 
             _context.UserFunction.Remove(jobTitleEntity);
+            //_context.SaveChanges();
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

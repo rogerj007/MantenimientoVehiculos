@@ -25,7 +25,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         
         [Display(Name = "Release Date")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Range(2000, int.MaxValue, ErrorMessage = "Year must be from 2000")]
+        [Range(1980, int.MaxValue, ErrorMessage = "Year must be from 2000")]
         public short Year { get; set; }
 
 
@@ -42,13 +42,14 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public DateTime? ModificationDate { get; set; }
         public DateTime? ModificationDateLocal => ModificationDate?.ToLocalTime();
 
-
+        [Display(Name = "Image")]
+        public string ImageUrl { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public VehicleBrandEntity VehicleBrand { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public TypeVehicleEntity TypeVehicle { get; set; }
+        public VehicleTypeEntity VehicleType { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public CountryEntity Country { get; set; }

@@ -157,7 +157,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             }
             _context.VehicleStatus.Remove(vehicleStatusEntity);
             await _context.SaveChangesAsync();
-            return View(vehicleStatusEntity);
+            return RedirectToAction(nameof(Index));
         }
 
 

@@ -51,18 +51,18 @@ namespace MantenimientoVehiculos.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TypeVehicle",
+                name: "VehicleType",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    TypeVehicle = table.Column<string>(maxLength: 25, nullable: false),
+                    VehicleType = table.Column<string>(maxLength: 25, nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false),
                     ModificationDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TypeVehicle", x => x.Id);
+                    table.PrimaryKey("PK_VehicleType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,7 +109,7 @@ namespace MantenimientoVehiculos.Web.Migrations
                     CreationDate = table.Column<DateTime>(nullable: false),
                     ModificationDate = table.Column<DateTime>(nullable: true),
                     VehicleBrandId = table.Column<int>(nullable: false),
-                    TypeVehicleId = table.Column<int>(nullable: false),
+                    VehicleTypeId = table.Column<int>(nullable: false),
                     CountryId = table.Column<int>(nullable: false),
                     FuelId = table.Column<int>(nullable: false),
                     ColorId = table.Column<int>(nullable: false)
@@ -136,9 +136,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vehicle_TypeVehicle_TypeVehicleId",
-                        column: x => x.TypeVehicleId,
-                        principalTable: "TypeVehicle",
+                        name: "FK_Vehicle_VehicleType_VehicleTypeId",
+                        column: x => x.VehicleTypeId,
+                        principalTable: "VehicleType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -177,9 +177,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                 column: "FuelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehicle_TypeVehicleId",
+                name: "IX_Vehicle_VehicleTypeId",
                 table: "Vehicle",
-                column: "TypeVehicleId");
+                column: "VehicleTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicle_VehicleBrandId",
@@ -202,7 +202,7 @@ namespace MantenimientoVehiculos.Web.Migrations
                 name: "Fuel");
 
             migrationBuilder.DropTable(
-                name: "TypeVehicle");
+                name: "VehicleType");
 
             migrationBuilder.DropTable(
                 name: "VehicleBrand");

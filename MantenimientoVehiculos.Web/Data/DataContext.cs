@@ -29,8 +29,8 @@ namespace MantenimientoVehiculos.Web.Data
                 .HasIndex(t => t.UserFunction)
                 .IsUnique();
 
-            builder.Entity<TypeVehicleEntity>()
-                .HasIndex(t => t.TypeVehicle)
+            builder.Entity<VehicleTypeEntity>()
+                .HasIndex(t => t.VehicleType)
                 .IsUnique();
 
             builder.Entity<VehicleBrandEntity>()
@@ -47,9 +47,11 @@ namespace MantenimientoVehiculos.Web.Data
         public DbSet<CountryEntity> Country { get; set; }
         public DbSet<FuelEntity> Fuel { get; set; }
         public DbSet<UserFunctionEntity> UserFunction { get; set; }
-        public DbSet<TypeVehicleEntity> TypeVehicle { get; set; }
+        public DbSet<VehicleTypeEntity> VehicleType { get; set; }
         public DbSet<VehicleBrandEntity> VehicleBrand { get; set; }
         public DbSet<VehicleEntity> Vehicle { get; set; }
         public DbSet<VehicleStatusEntity> VehicleStatus { get; set; }
+
+        public DbSet<ComponentEntity> Component { get; set; }
     }
 }

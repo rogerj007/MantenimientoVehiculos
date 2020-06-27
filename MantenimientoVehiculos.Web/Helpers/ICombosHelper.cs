@@ -11,7 +11,7 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         IEnumerable<SelectListItem> GetComboBrandVehicle();
 
-        IEnumerable<SelectListItem> GetComboTypeVehicle();
+        IEnumerable<SelectListItem> GetComboVehicleType();
 
         IEnumerable<SelectListItem> GetComboFuel();
 

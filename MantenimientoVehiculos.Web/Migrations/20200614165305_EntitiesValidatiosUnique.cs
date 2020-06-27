@@ -19,9 +19,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TypeVehicle_TypeVehicle",
-                table: "TypeVehicle",
-                column: "TypeVehicle",
+                name: "IX_VehicleType_VehicleType",
+                table: "VehicleType",
+                column: "VehicleType",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -48,8 +48,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                 table: "VehicleBrand");
 
             migrationBuilder.DropIndex(
-                name: "IX_TypeVehicle_TypeVehicle",
-                table: "TypeVehicle");
+                name: "IX_VehicleType_VehicleType",
+                table: "VehicleType");
 
             migrationBuilder.DropIndex(
                 name: "IX_JobTitle_JobTitle",

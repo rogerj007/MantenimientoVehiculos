@@ -161,7 +161,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             _context.Color.Remove(colorEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-            //  return View(colorEntity);
+      
         }
 
         private bool ColorEntityExists(int id)

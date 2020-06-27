@@ -26,17 +26,20 @@ namespace MantenimientoVehiculos.Web.Data
 
             //Variables
             await CheckCountryAsync();
+            await CheckComponetsAsync();
             await CheckColorAsync();
             await CheckFuelAsync();
             await CheckUserTypeAsync();
-            await CheckTypeVehiculeAsync();
-            await CheckStatusVehiculeAsync();
-            await CheckBrandVehiculeAsync();
+            await CheckVehiculeTypeAsync();
+            await CheckVehiculeStatusAsync();
+            await CheckVehiculeBrandAsync();
 
             //Roles
             await CheckRolesAsync();
             await CheckUsersAsync();
         }
+
+       
 
 
         private async Task CheckRolesAsync()
@@ -86,7 +89,28 @@ namespace MantenimientoVehiculos.Web.Data
 
 
         #region Variabled
-        private async Task CheckBrandVehiculeAsync()
+
+        private async Task CheckComponetsAsync()
+        {
+            if (!_dataContext.Component.Any())
+            {
+                await _dataContext.Component.AddRangeAsync(
+                    new ComponentEntity { Component = "FILTRO TRAMPA DE AGUA", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO DE ACEITE", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO ACEITE HIDRAULICO", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO DE AIRE", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO DE AIRE SECUNDARIO", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE PRIMARIO", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE SECUNDARIO", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO RACOR", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO SECADOR", CreationDate = DateTime.UtcNow }
+
+                );
+                await _dataContext.SaveChangesAsync();
+            }
+        }
+        private async Task CheckVehiculeBrandAsync()
         {
             if (!_dataContext.VehicleBrand.Any())
             {
@@ -105,7 +129,7 @@ namespace MantenimientoVehiculos.Web.Data
             }
         }
 
-        private async Task CheckStatusVehiculeAsync()
+        private async Task CheckVehiculeStatusAsync()
         {
             if (!_dataContext.VehicleStatus.Any())
             {
@@ -118,19 +142,19 @@ namespace MantenimientoVehiculos.Web.Data
             }
         }
 
-        private async Task CheckTypeVehiculeAsync()
+        private async Task CheckVehiculeTypeAsync()
         {
-            if (!_dataContext.TypeVehicle.Any())
+            if (!_dataContext.VehicleType.Any())
             {
-                await _dataContext.TypeVehicle.AddRangeAsync(
-                    new TypeVehicleEntity { TypeVehicle = "VOLQUETA", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "BUS", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "KABEZAL", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "VEHICULO ESPECIAL", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "ESCAVADORA", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "TRACTOR", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "MOTO NIVELADORA", CreationDate = DateTime.UtcNow },
-                    new TypeVehicleEntity { TypeVehicle = "RODILLO", CreationDate = DateTime.UtcNow }
+                await _dataContext.VehicleType.AddRangeAsync(
+                    new VehicleTypeEntity { VehicleType = "VOLQUETA", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "BUS", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "KABEZAL", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "VEHICULO ESPECIAL", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "ESCAVADORA", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "TRACTOR", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "MOTO NIVELADORA", CreationDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { VehicleType = "RODILLO", CreationDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
             }

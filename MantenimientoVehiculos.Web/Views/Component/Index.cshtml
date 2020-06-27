@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MantenimientoVehiculos.Web.Data.Entities.VehicleEntity>
+﻿@model IEnumerable<MantenimientoVehiculos.Web.Data.Entities.ComponentEntity>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,26 +15,15 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Color</h3>
+                <h3 class="panel-title">Componets</h3>
             </div>
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable">
                     <thead>
                         <tr>
+
                             <th>
-                                @Html.DisplayNameFor(model => model.Plaque)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.MotorSerial)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Chassis)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Cylinder)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Year)
+                                @Html.DisplayNameFor(model => model.Component)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.CreationDate)
@@ -49,20 +38,9 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Plaque)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.MotorSerial)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Chassis)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Cylinder)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Year)
+                                    @Html.DisplayFor(modelItem => item.Component)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CreationDateLocal)
@@ -84,28 +62,28 @@
     </div>
 </div>
 
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#MyTable').DataTable();
         });
+
         function functionConfirm(itemToDelete) {
             event.preventDefault();
             window.swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this item!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this item!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
                 .then((willDelete) => {
                     if (willDelete) {
-                        window.location.href = '/Vehicle/Delete/' + itemToDelete;
+                        window.location.href = '/Component/Delete/' + itemToDelete;
                         window.swal("Poof! Your item has been deleted!",
                             {
                                 icon: "success"
