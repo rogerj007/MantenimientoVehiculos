@@ -197,10 +197,15 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Color.Any())
             {
                 await _dataContext.Color.AddRangeAsync(
-                    new ColorEntity { Color = "RED", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "BLACK", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "BLUE", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "YELLOW", CreationDate = DateTime.UtcNow }
+                    new ColorEntity { Color = "ROJO", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "NEGRO", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "AZUL", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "AMARILLO", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "NARANJA", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "BLANCO", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "MORADO", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "PLOMO", CreationDate = DateTime.UtcNow },
+                                new ColorEntity { Color = "MARRON", CreationDate = DateTime.UtcNow }
                     );
                 await _dataContext.SaveChangesAsync();
 
@@ -227,5 +232,36 @@ namespace MantenimientoVehiculos.Web.Data
 
         #endregion
 
+        private async Task CheckVehicleAsync()
+        {
+            if (!_dataContext.Vehicle.Any())
+            {
+                var vehicleStatus = _dataContext.VehicleStatus.FirstOrDefault();
+                var vehicleType = _dataContext.VehicleType.FirstOrDefault();
+                var vehicleBrand = _dataContext.VehicleBrand.FirstOrDefault();
+                var country = _dataContext.Country.FirstOrDefault();
+                var color = _dataContext.Color.FirstOrDefault();
+                var fuel = _dataContext.Fuel.FirstOrDefault();
+                await _dataContext.Vehicle.AddRangeAsync(
+                    new VehicleEntity
+                    {
+                        VehicleType= vehicleType,
+                        VehicleStatus=vehicleStatus,
+                        VehicleBrand=vehicleBrand,
+                        Country = country,
+                        Color=color, 
+                        Fuel=fuel,
+                        Plaque="XXX696",
+                        Chassis="XDXDXDXD",
+                        Year=2020,
+                        MotorSerial="ASDFGHJKL",
+                        Cylinder =1515,
+                        CreationDate = DateTime.UtcNow
+                    }
+                );
+                await _dataContext.SaveChangesAsync();
+
+            }
+        }
     }
 }

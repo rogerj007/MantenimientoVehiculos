@@ -22,6 +22,24 @@
                     <thead>
                         <tr>
                             <th>
+                                @Html.DisplayNameFor(model => model.ImageUrl)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VehicleStatus.VehicleStatus)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VehicleBrand.VehicleBrand)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.VehicleType.VehicleType)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Color.Color)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Country.Country)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Plaque)
                             </th>
                             <th>
@@ -36,12 +54,6 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Year)
                             </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CreationDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.ModificationDate)
-                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -49,6 +61,27 @@
                         @foreach (var item in Model)
                         {
                             <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                    {
+                                        <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:150px;height:150px;max-width: 100%; height: auto;" />
+                                    }
+                                </td>
+                                <th>
+                                    @Html.DisplayFor(model => item.VehicleStatus.VehicleStatus)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => item.VehicleBrand.VehicleBrand)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => item.VehicleType.VehicleType)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => item.Color.Color)
+                                </th>
+                                <th>
+                                    @Html.DisplayFor(model => item.Country.Country)
+                                </th>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Plaque)
                                 </td>
@@ -63,12 +96,6 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Year)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreationDateLocal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ModificationDateLocal)
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -111,7 +138,7 @@
                                 icon: "success"
                             });
                     } else {
-                        window.swal("Your imaginary file is safe!");
+                        window.swal("Your record is safe!");
                     }
                 });
 

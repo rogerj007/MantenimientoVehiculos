@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
 using MantenimientoVehiculos.Web.Helpers;
+using MantenimientoVehiculos.Web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
@@ -17,17 +21,33 @@ namespace MantenimientoVehiculos.Web.Controllers
     {
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHelper _converterHelper;
 
-        public VehicleController(DataContext context, ICombosHelper combosHelper)
+        public VehicleController(DataContext context, ICombosHelper combosHelper,IConverterHelper converterHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
+            _converterHelper = converterHelper;
         }
 
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        
         // GET: Vehicle
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vehicle.Include(c=>c.Color).Include(vb=>vb.VehicleBrand).ToListAsync());
+            return View(await _context.Vehicle
+                                            .Include(c=>c.Color)
+                                            .Include(vb=>vb.VehicleBrand)
+                                            .Include(vb => vb.VehicleStatus)
+                                            .Include(vb => vb.Country)
+                                            .Include(vb => vb.Fuel)
+                                            .Include(vb => vb.VehicleType)
+                                            .ToListAsync());
         }
 
         // GET: Vehicle/Details/5
@@ -51,7 +71,19 @@ namespace MantenimientoVehiculos.Web.Controllers
         // GET: Vehicle/Create
         public IActionResult Create()
         {
-            return View();
+
+            var model = new VehicleViewModel
+            {
+                VehicleBrands = _combosHelper.GetComboBrandVehicle(),
+                VehicleTypes = _combosHelper.GetComboVehicleType(),
+                VehicleStatu = _combosHelper.GetComboVehicleStatus(),
+                Countries = _combosHelper.GetComboCountry(),
+                Fuels = _combosHelper.GetComboFuel(),
+                Colors=_combosHelper.GetComboColor(),
+                CreationDate=DateTime.UtcNow
+            };
+
+            return View(model);
         }
 
         // POST: Vehicle/Create
@@ -59,16 +91,57 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(VehicleEntity vehicleEntity)
+        public async Task<IActionResult> Create(VehicleViewModel model)
         {
             if (ModelState.IsValid)
             {
-                
-                _context.Add(vehicleEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var path = string.Empty;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        var guid = Guid.NewGuid().ToString();
+                        var file = $"{guid}.jpg";
+
+                        path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\Vechicles", file);
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await model.ImageFile.CopyToAsync(stream);
+                        }
+                        path = $"~/images/Vechicles/{file}";
+                    }
+                    var vehicle = await _converterHelper.ToVehicleAsync(model, path, true);
+                    _context.Add(vehicle);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception e)
+                {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors);
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.ErrorMessage);
+                    }
+                }
+               
             }
-            return View(vehicleEntity);
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.ErrorMessage);
+                }
+            }
+
+            model.VehicleBrands = _combosHelper.GetComboBrandVehicle();
+            model.VehicleTypes = _combosHelper.GetComboVehicleType();
+            model.VehicleStatu = _combosHelper.GetComboVehicleStatus();
+            model.Countries = _combosHelper.GetComboCountry();
+            model.Fuels = _combosHelper.GetComboFuel();
+            model.Colors = _combosHelper.GetComboColor();
+            return View(model);
         }
 
         // GET: Vehicle/Edit/5
@@ -79,12 +152,21 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var vehicleEntity = await _context.Vehicle.FindAsync(id);
-            if (vehicleEntity == null)
+            var vehicle=await _context.Vehicle
+                .Include(c => c.Color)
+                .Include(vb => vb.VehicleBrand)
+                .Include(vb => vb.VehicleStatus)
+                .Include(vb => vb.Country)
+                .Include(vb => vb.Fuel)
+                .Include(vb => vb.VehicleType)
+                .FirstOrDefaultAsync(p => p.Id == id.Value);
+
+            if (vehicle == null)
             {
                 return NotFound();
             }
-            return View(vehicleEntity);
+            var vehicleView = _converterHelper.ToVehicleViewModel(vehicle);
+            return View(vehicleView);
         }
 
         // POST: Vehicle/Edit/5
@@ -92,36 +174,56 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, VehicleEntity vehicleEntity)
+        public async Task<IActionResult> Edit(VehicleViewModel model)
         {
-            if (id != vehicleEntity.Id)
-            {
-                return NotFound();
-            }
+           
 
             if (ModelState.IsValid)
             {
+
+                var path = model.ImageUrl;
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    var guid = Guid.NewGuid().ToString();
+                    var file = $"{guid}.jpg";
+
+                    path = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot\\images\\Vechicles",
+                        file);
+                    //if (!Directory.Exists(path))
+                    //    Directory.CreateDirectory(path);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(stream);
+                    }
+
+                    path = $"~/images/Vechicles/{file}";
+                }
+
                 try
                 {
-                    var vehicle = _context.Vehicle.SingleOrDefaultAsync(v=>v.Id.Equals(vehicleEntity.Id));
-                    vehicle.Result.ModificationDate = DateTime.UtcNow;
+                    var vehicle = await _converterHelper.ToVehicleAsync(model, path, false);
                     _context.Update(vehicle);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VehicleEntityExists(vehicleEntity.Id))
+                    if (!VehicleEntityExists(model.Id))
                     {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehicleEntity);
+            model.VehicleBrands = _combosHelper.GetComboBrandVehicle();
+            model.VehicleTypes = _combosHelper.GetComboVehicleType();
+            model.VehicleStatu = _combosHelper.GetComboVehicleStatus();
+            model.Countries = _combosHelper.GetComboCountry();
+            model.Fuels = _combosHelper.GetComboFuel();
+            model.Colors = _combosHelper.GetComboColor();
+            return View(model);
         }
 
         // GET: Vehicle/Delete/5

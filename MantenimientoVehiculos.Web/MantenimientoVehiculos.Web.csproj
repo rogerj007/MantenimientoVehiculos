@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\images\Vechicles\" />
     <Folder Include="wwwroot\images\Users\" />
   </ItemGroup>
 

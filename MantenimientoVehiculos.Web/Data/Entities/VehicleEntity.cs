@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class VehicleEntity
+    public class VehicleEntity: BaseEntity
     {
-        public int Id { get; set; }
+      
 
 
-        [StringLength(8, MinimumLength = 7, ErrorMessage = "The {0} field must have {1} characters.")]
+        [StringLength(7, MinimumLength = 7, ErrorMessage = "The {0} field must have {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [RegularExpression(@"^([A-Za-z]{3}\d{4})$", ErrorMessage = "The field {0} must starts with three characters and ends with numbers.")]
         public string Plaque { get; set; }
 
         [StringLength(25, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
@@ -21,44 +22,23 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public string Chassis { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Range(1000, int.MaxValue, ErrorMessage = "Year must be from 1000")]
         public int Cylinder { get; set; }
         
         [Display(Name = "Release Date")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Range(1980, int.MaxValue, ErrorMessage = "Year must be from 2000")]
         public short Year { get; set; }
-
-
-        [DataType(DataType.DateTime)]
-        [Display(Name = "Creation Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]
-        public DateTime CreationDate { get; set; } = DateTime.UtcNow;
-        public DateTime CreationDateLocal => CreationDate.ToLocalTime();
-
-
-        [DataType(DataType.DateTime)]
-        [Display(Name = "Modification Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]
-        public DateTime? ModificationDate { get; set; }
-        public DateTime? ModificationDateLocal => ModificationDate?.ToLocalTime();
-
+        
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+     
         public VehicleBrandEntity VehicleBrand { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public VehicleTypeEntity VehicleType { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public CountryEntity Country { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public FuelEntity Fuel { get; set; }
-
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public ColorEntity Color { get; set; }
+        public VehicleStatusEntity VehicleStatus { get; set; }
 
     }
 }
