@@ -29,9 +29,10 @@ namespace MantenimientoVehiculos.Web.Controllers
 
         public IActionResult Register()
         {
-            AddUserViewModel model = new AddUserViewModel
+            var model = new AddUserViewModel
             {
-                UserTypes = _combosHelper.GetComboRoles()
+                UserTypes = _combosHelper.GetComboRoles(),
+                UserFuncion = _combosHelper.GetComboUserFuncion()
             };
 
             return View(model);
@@ -67,7 +68,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
                 var response = _mailHelper.SendMail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
                                                                                           $"To allow the user, " +
-                                                                                          $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+                                                                                          $"plase click in this link: </br></br><a href = \"{tokenLink}\">Confirm Email</a>");
                 if (response.IsSuccess)
                 {
                     ViewBag.Message = "The instructions to allow your user has been sent to email.";

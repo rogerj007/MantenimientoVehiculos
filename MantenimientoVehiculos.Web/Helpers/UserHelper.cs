@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
 using MantenimientoVehiculos.Web.Enums;
 using MantenimientoVehiculos.Web.Models;
@@ -14,16 +15,18 @@ namespace MantenimientoVehiculos.Web.Helpers
         private readonly UserManager<UserEntity> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<UserEntity> _signInManager;
+        private readonly DataContext _context;
 
         public UserHelper(
             UserManager<UserEntity> userManager,
             RoleManager<IdentityRole> roleManager,
-            SignInManager<UserEntity> signInManager)
+            SignInManager<UserEntity> signInManager,
+            DataContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-
+            _context = context;
         }
 
         public async Task<IdentityResult> ConfirmEmailAsync(UserEntity user, string token)
@@ -101,7 +104,7 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         public async Task<UserEntity> AddUserAsync(AddUserViewModel model, string path)
         {
-            UserEntity userEntity = new UserEntity
+            var userEntity = new UserEntity
             {
                 Address = model.Address,
                 Document = model.Document,
@@ -111,7 +114,8 @@ namespace MantenimientoVehiculos.Web.Helpers
                 PicturePath = path,
                 PhoneNumber = model.PhoneNumber,
                 UserName = model.Username,
-                UserType = model.UserTypeId == 1 ? UserType.Supervisor : UserType.User
+                UserType = model.UserTypeId == 1 ? UserType.Supervisor : UserType.User,
+                UserFunction = await _context.UserFunction.FindAsync(model.UserFuncionId)
             };
 
             IdentityResult result = await _userManager.CreateAsync(userEntity, model.Password);

@@ -13,6 +13,44 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             _context = context;
         }
+
+        #region Users
+
+        public IEnumerable<SelectListItem> GetComboRoles()
+        {
+            var list = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "0", Text = "[Select a role...]" },
+                new SelectListItem { Value = "1", Text = "Supervisor" },
+                new SelectListItem { Value = "2", Text = "User" }
+            };
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboUserFuncion()
+        {
+            var list = _context.UserFunction.Select(t => new SelectListItem
+                {
+                    Text = t.UserFunction,
+                    Value = $"{t.Id}"
+                })
+                .OrderBy(t => t.Text)
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a User Funcion...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        #endregion
+
+
+
         public IEnumerable<SelectListItem> GetComboBrandVehicle()
         {
             var list = _context.VehicleBrand.Select(t => new SelectListItem
@@ -47,18 +85,6 @@ namespace MantenimientoVehiculos.Web.Helpers
                 Text = "[Select a Color...]",
                 Value = "0"
             });
-
-            return list;
-        }
-
-        public IEnumerable<SelectListItem> GetComboRoles()
-        {
-            var list = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "0", Text = "[Select a role...]" },
-                new SelectListItem { Value = "1", Text = "Supervisor" },
-                new SelectListItem { Value = "2", Text = "User" }
-            };
 
             return list;
         }
@@ -133,6 +159,25 @@ namespace MantenimientoVehiculos.Web.Helpers
             list.Insert(0, new SelectListItem
             {
                 Text = "[Select a Country...]",
+                Value = "0"
+            });
+
+            return list;
+        }
+
+        public IEnumerable<SelectListItem> GetComboVehicles()
+        {
+            var list = _context.Vehicle.Select(t => new SelectListItem
+                {
+                    Text = t.Plaque,
+                    Value = $"{t.Id}"
+                })
+                .OrderBy(t => t.Text)
+                .ToList();
+
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a Vehicle...]",
                 Value = "0"
             });
 

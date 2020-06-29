@@ -7,6 +7,8 @@ namespace MantenimientoVehiculos.Web.Helpers
     {
         IEnumerable<SelectListItem> GetComboRoles();
 
+        IEnumerable<SelectListItem> GetComboUserFuncion();
+
         IEnumerable<SelectListItem> GetComboColor();
 
         IEnumerable<SelectListItem> GetComboBrandVehicle();
@@ -18,5 +20,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         IEnumerable<SelectListItem> GetComboVehicleStatus();
 
         IEnumerable<SelectListItem> GetComboCountry();
+
+        IEnumerable<SelectListItem> GetComboVehicles();
     }
 }

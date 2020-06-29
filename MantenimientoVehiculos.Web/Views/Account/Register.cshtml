@@ -9,7 +9,7 @@
 <h4>User</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <form asp-action="Register" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -25,6 +25,12 @@
                 <label asp-for="UserTypeId" class="control-label"></label>
                 <select asp-for="UserTypeId" asp-items="Model.UserTypes" class="form-control"></select>
                 <span asp-validation-for="UserTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserFuncionId" class="control-label"></label>
+                <select id="cmbUserFuncion" asp-for="UserFuncionId" asp-items="Model.UserFuncion" class="form-control" ></select>
+                <span asp-validation-for="UserFuncionId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -53,4 +59,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    $(document).ready(function() {
+        $('#cmbUserFuncion').searchable();
+    });
 }

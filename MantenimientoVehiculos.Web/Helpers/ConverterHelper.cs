@@ -61,5 +61,28 @@ namespace MantenimientoVehiculos.Web.Helpers
                 Colors=_combosHelper.GetComboColor()
             };
         }
+
+        public async Task<VehicleRecordActivityEntity> ToVehicleRecordActivityAsync(VehicleRecordActivityViewModel model, bool isNew)
+        {
+            return new VehicleRecordActivityEntity
+            {
+                Id = isNew ? 0 : model.Id,
+                KmHr=model.KmHr,
+                Vehicle= await _context.Vehicle.FindAsync(model.VehicleId)
+                //User= await _context.Users.FindAsync(model.User.Id),
+            };
+
+        }
+
+        public VehicleRecordActivityViewModel ToVehicleRecordActivityViewModel(VehicleRecordActivityEntity vehicle)
+        {
+            return new VehicleRecordActivityViewModel
+            {
+                Id = vehicle.Id,
+                KmHr = vehicle.KmHr,
+                Vehicles = _combosHelper.GetComboVehicles()
+                //User= await _context.Users.FindAsync(model.User.Id),
+            };
+        }
     }
 }

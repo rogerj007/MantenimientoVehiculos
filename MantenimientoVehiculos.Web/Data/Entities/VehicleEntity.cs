@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
@@ -29,7 +30,10 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Range(1980, int.MaxValue, ErrorMessage = "Year must be from 2000")]
         public short Year { get; set; }
-        
+
+        [Display(Name = "Vehicle Info")]
+        public string VehicleInfoWithColor => $"{VehicleBrand.VehicleBrand} {Plaque} - {Color.Color}";
+
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
      
@@ -39,6 +43,9 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public FuelEntity Fuel { get; set; }
         public ColorEntity Color { get; set; }
         public VehicleStatusEntity VehicleStatus { get; set; }
+
+        public ICollection<VehicleRecordActivityEntity> VehicleRecordActivities { get; set; }
+        
 
     }
 }

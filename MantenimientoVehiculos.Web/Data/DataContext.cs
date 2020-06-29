@@ -51,7 +51,9 @@ namespace MantenimientoVehiculos.Web.Data
         public DbSet<VehicleBrandEntity> VehicleBrand { get; set; }
         public DbSet<VehicleEntity> Vehicle { get; set; }
         public DbSet<VehicleStatusEntity> VehicleStatus { get; set; }
-
         public DbSet<ComponentEntity> Component { get; set; }
+        public DbSet<VehicleMaintenanceEntity> VehicleMaintenance { get; set; }
+        public DbSet<VehicleMaintenanceDetailEntity> VehicleMaintenanceDetail { get; set; }
+        public DbSet<VehicleRecordActivityEntity> VehicleRecordActivities { get; set; }
     }
 }

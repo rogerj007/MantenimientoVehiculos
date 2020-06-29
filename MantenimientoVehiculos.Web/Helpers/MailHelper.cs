@@ -19,22 +19,22 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             try
             {
-                string from = _configuration["Mail:From"];
-                string smtp = _configuration["Mail:Smtp"];
-                string port = _configuration["Mail:Port"];
-                string password = _configuration["Mail:Password"];
+                var from = _configuration["Mail:From"];
+                var smtp = _configuration["Mail:Smtp"];
+                var port = _configuration["Mail:Port"];
+                var password = _configuration["Mail:Password"];
 
-                MimeMessage message = new MimeMessage();
+                var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(from));
                 message.To.Add(new MailboxAddress(to));
                 message.Subject = subject;
-                BodyBuilder bodyBuilder = new BodyBuilder
+                var bodyBuilder = new BodyBuilder
                 {
                     HtmlBody = body
                 };
                 message.Body = bodyBuilder.ToMessageBody();
 
-                using (SmtpClient client = new SmtpClient())
+                using (var client = new SmtpClient())
                 {
                     client.Connect(smtp, int.Parse(port), false);
                     client.Authenticate(from, password);

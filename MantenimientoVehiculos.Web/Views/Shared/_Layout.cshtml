@@ -37,19 +37,26 @@
                         @if (User.Identity.IsAuthenticated &&  (User.IsInRole("Admin") || User.IsInRole("Supervisor") ))
                         {
                             <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Variables <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="Color" asp-action="Index"><i class="glyphicon glyphicon-plus"></i> Color</a></li>
-                                <li><a asp-area="" asp-controller="Country" asp-action="Index"><i class="glyphicon glyphicon-globe"></i> Country</a></li>
-                                <li><a asp-area="" asp-controller="Fuel" asp-action="Index"><i class="glyphicon glyphicon-scale"></i> Fuel</a></li>
-                                <li><a asp-area="" asp-controller="UserFunction" asp-action="Index"><i class="glyphicon glyphicon-education"></i> User Type</a></li>
-                                <li><a asp-area="" asp-controller="VehicleType" asp-action="Index"><i class="glyphicon glyphicon-road"></i> Vehicle Type</a></li>
-                                <li><a asp-area="" asp-controller="VehicleBrand" asp-action="Index"><i class="glyphicon glyphicon-tags"></i> Vehicle Brand</a></li>
-                                <li><a asp-area="" asp-controller="VehicleStatus" asp-action="Index"><i class="glyphicon glyphicon-alert"></i> Vehicle Status</a></li>
-                                <li><a asp-area="" asp-controller="Component" asp-action="Index"><i class="glyphicon glyphicon-alert"></i> Component</a></li>
-                                <li><a asp-area="" asp-controller="Vehicle" asp-action="Index"><i class="glyphicon glyphicon-bed"></i> Vehicle</a></li>
-                            </ul>
-                           </li>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Variables <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="Color" asp-action="Index"><i class="glyphicon glyphicon-plus"></i> Color</a></li>
+                                    <li><a asp-area="" asp-controller="Country" asp-action="Index"><i class="glyphicon glyphicon-globe"></i> Country</a></li>
+                                    <li><a asp-area="" asp-controller="Fuel" asp-action="Index"><i class="glyphicon glyphicon-scale"></i> Fuel</a></li>
+                                    <li><a asp-area="" asp-controller="UserFunction" asp-action="Index"><i class="glyphicon glyphicon-education"></i> User Type</a></li>
+                                    <li><a asp-area="" asp-controller="VehicleType" asp-action="Index"><i class="glyphicon glyphicon-road"></i> Vehicle Type</a></li>
+                                    <li><a asp-area="" asp-controller="VehicleBrand" asp-action="Index"><i class="glyphicon glyphicon-th"></i> Vehicle Brand</a></li>
+                                    <li><a asp-area="" asp-controller="VehicleStatus" asp-action="Index"><i class="glyphicon glyphicon-alert"></i> Vehicle Status</a></li>
+                                    <li><a asp-area="" asp-controller="Component" asp-action="Index"><i class="glyphicon glyphicon-tags"></i> Component</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Eventos <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-area="" asp-controller="Vehicle" asp-action="Index"><i class="glyphicon glyphicon-bed"></i> Vehicle</a></li>
+                                    <li><a asp-area="" asp-controller="VehicleRecordActivity" asp-action="Index"><i class="glyphicon glyphicon-check"></i> Record Vehicle Activity</a></li>
+                                    <li><a asp-area="" asp-controller="Vehicle" asp-action="Index"><i class="glyphicon glyphicon-bed"></i>  Vehicle Maintenance</a></li>
+                                </ul>
+                            </li>
                         }
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

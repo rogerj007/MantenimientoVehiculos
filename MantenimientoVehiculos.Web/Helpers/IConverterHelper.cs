@@ -9,5 +9,9 @@ namespace MantenimientoVehiculos.Web.Helpers
         Task<VehicleEntity> ToVehicleAsync(VehicleViewModel model, string path, bool isNew);
 
         VehicleViewModel ToVehicleViewModel(VehicleEntity vehicle);
+
+        Task<VehicleRecordActivityEntity> ToVehicleRecordActivityAsync(VehicleRecordActivityViewModel model, bool isNew);
+
+        VehicleRecordActivityViewModel ToVehicleRecordActivityViewModel(VehicleRecordActivityEntity vehicle);
     }
 }
