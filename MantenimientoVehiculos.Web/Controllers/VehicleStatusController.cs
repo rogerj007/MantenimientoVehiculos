@@ -61,6 +61,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
                 vehicleStatusEntity.VehicleStatus = vehicleStatusEntity.VehicleStatus.ToUpper();
+                vehicleStatusEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(vehicleStatusEntity);
                 try
                 {

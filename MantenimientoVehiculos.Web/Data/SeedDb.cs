@@ -95,16 +95,16 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Component.Any())
             {
                 await _dataContext.Component.AddRangeAsync(
-                    new ComponentEntity { Component = "FILTRO TRAMPA DE AGUA", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO DE ACEITE", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO ACEITE HIDRAULICO", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO DE AIRE", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO DE AIRE SECUNDARIO", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE PRIMARIO", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE SECUNDARIO", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO RACOR", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO SECADOR", CreationDate = DateTime.UtcNow }
+                    new ComponentEntity { Component = "FILTRO TRAMPA DE AGUA",Code="xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO DE ACEITE", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO ACEITE HIDRAULICO", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO DE AIRE", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO DE AIRE SECUNDARIO", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE PRIMARIO", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE SECUNDARIO", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO RACOR", Code = "xxxx", CreationDate = DateTime.UtcNow },
+                    new ComponentEntity { Component = "FILTRO SECADOR", Code = "xxxx", CreationDate = DateTime.UtcNow }
 
                 );
                 await _dataContext.SaveChangesAsync();

@@ -61,6 +61,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
                 fuelEntity.Fuel = fuelEntity.Fuel.ToUpper();
+                fuelEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(fuelEntity);
                 try
                 {

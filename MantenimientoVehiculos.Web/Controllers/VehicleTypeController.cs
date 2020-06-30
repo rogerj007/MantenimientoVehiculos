@@ -60,6 +60,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                typeVehicleEntity.VehicleType = typeVehicleEntity.VehicleType.ToUpper();
+                typeVehicleEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(typeVehicleEntity);
                 try
                 {

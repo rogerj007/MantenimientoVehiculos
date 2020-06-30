@@ -61,6 +61,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
                 jobTitleEntity.UserFunction = jobTitleEntity.UserFunction.ToUpper();
+                jobTitleEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(jobTitleEntity);
                 try
                 {

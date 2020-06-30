@@ -39,8 +39,6 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public UserType UserType { get; set; }
         public bool Enable { get; set; }
         
-        
-        
         [DataType(DataType.DateTime)]
         [Display(Name = "Creation Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]

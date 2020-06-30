@@ -59,7 +59,13 @@ namespace MantenimientoVehiculos.Web.Controllers
             }
 
             var vehicleEntity = await _context.Vehicle
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(c => c.Color)
+                .Include(vb => vb.VehicleBrand)
+                .Include(vb => vb.VehicleStatus)
+                .Include(vb => vb.Country)
+                .Include(vb => vb.Fuel)
+                .Include(vb => vb.VehicleType)
+                .FirstOrDefaultAsync(p => p.Id == id.Value);
             if (vehicleEntity == null)
             {
                 return NotFound();
@@ -112,6 +118,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                         path = $"~/images/Vechicles/{file}";
                     }
                     var vehicle = await _converterHelper.ToVehicleAsync(model, path, true);
+                    vehicle.CreationDate = DateTime.UtcNow;
                     _context.Add(vehicle);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -205,6 +212,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var vehicle = await _converterHelper.ToVehicleAsync(model, path, false);
+                    vehicle.ModificationDate = DateTime.UtcNow;
                     _context.Update(vehicle);
                     await _context.SaveChangesAsync();
                 }

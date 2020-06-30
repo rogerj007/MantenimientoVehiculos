@@ -59,6 +59,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
                 vehicleBrandEntity.VehicleBrand = vehicleBrandEntity.VehicleBrand.ToUpper();
+                vehicleBrandEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(vehicleBrandEntity);
                 try
                 {

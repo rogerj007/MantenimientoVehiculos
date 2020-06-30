@@ -61,6 +61,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
                 countryEntity.Country = countryEntity.Country.ToUpper();
+                countryEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(countryEntity);
                 try
                 {

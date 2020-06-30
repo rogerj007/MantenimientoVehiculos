@@ -1,31 +1,134 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using MantenimientoVehiculos.Web.Enums;
 using MantenimientoVehiculos.Web.Helpers;
 using MantenimientoVehiculos.Web.Models;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly DataContext _dataContext;
         private readonly IUserHelper _userHelper;
         private readonly IImageHelper _imageHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly IMailHelper _mailHelper;
 
-        public AccountController(IUserHelper userHelper,
+        public AccountController(DataContext dataContext,
+                                IUserHelper userHelper,
                                 IImageHelper imageHelper,
                                 ICombosHelper combosHelper,
                                 IMailHelper mailHelper 
         )
         {
+            _dataContext = dataContext;
             _userHelper = userHelper;
             _imageHelper = imageHelper;
             _combosHelper = combosHelper;
             _mailHelper = mailHelper;
         }
+
+
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Index()
+        {
+            return View(await _dataContext.Users
+                        .Include(u => u.UserFunction)
+                        //.Where(u => u.UserType == UserType.User)
+                        .OrderBy(u => u.FirstName)
+                        .ThenBy(u => u.LastName)
+                        .ToListAsync());
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var userEntity = await _dataContext.Users.FindAsync(id);
+            if (userEntity == null)
+            {
+                return NotFound();
+            }
+            return View(userEntity);
+        }
+
+        // POST: Color/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, UserEntity userEntity)
+        {
+            if (id != userEntity.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = _dataContext.Users.SingleOrDefaultAsync(c => c.Id.Equals(id));
+                    user.Result.ModificationDate = DateTime.UtcNow;
+                    try
+                    {
+                        await _dataContext.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (Exception e)
+                    {
+                        if (e.InnerException != null)
+                            ModelState.AddModelError(string.Empty,
+                                e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                    ? "Already exists row"
+                                    : e.InnerException.Message);
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    //if (!ColorEntityExists(colorEntity.Id))
+                    //{
+                    //    return NotFound();
+                    //}
+
+                    //throw;
+                }
+
+            }
+            return View(userEntity);
+        }
+
+        // GET: Color/Delete/5
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _dataContext.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _dataContext.Users.Remove(user);
+            await _dataContext.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+        }
+
 
         public IActionResult Register()
         {

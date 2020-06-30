@@ -62,6 +62,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
 
                 colorEntity.Color = colorEntity.Color.ToUpper();
+                colorEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(colorEntity);
                 try
                 {

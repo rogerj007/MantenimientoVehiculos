@@ -60,6 +60,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                
                 componentEntity.Component = componentEntity.Component.ToUpper();
+                componentEntity.CreationDate = DateTime.UtcNow;
                 _context.Add(componentEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

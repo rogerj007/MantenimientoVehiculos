@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Data
 {
-    public class DataContext :  IdentityDbContext<UserEntity>//DbContext
+    public class DataContext :  IdentityDbContext<UserEntity>//DbContext//
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

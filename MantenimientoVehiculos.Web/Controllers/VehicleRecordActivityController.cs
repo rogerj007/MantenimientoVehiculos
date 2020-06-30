@@ -75,6 +75,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var vehicleRecordActivity = await _converterHelper.ToVehicleRecordActivityAsync(model, true);
+                    vehicleRecordActivity.CreationDate = DateTime.UtcNow;
                     _context.Add(vehicleRecordActivity);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -107,6 +108,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             }
 
             var vehicleRecordActivityEntity = await _context.VehicleRecordActivities.FindAsync(id);
+
             if (vehicleRecordActivityEntity == null)
             {
                 return NotFound();

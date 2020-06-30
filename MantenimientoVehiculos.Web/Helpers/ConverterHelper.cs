@@ -17,7 +17,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         }
         public async Task<VehicleEntity> ToVehicleAsync(VehicleViewModel model, string path, bool isNew)
         {
-            return new VehicleEntity
+            var vehicle= new VehicleEntity
             {
                 Id = isNew ? 0 : model.Id,
                 Plaque = model.Plaque,
@@ -25,7 +25,7 @@ namespace MantenimientoVehiculos.Web.Helpers
                 Chassis = model.Chassis,
                 Cylinder=model.Cylinder,
                 Year = model.Year,
-                ImageUrl=path,
+                ImageUrl= model.ImageUrl,
                 VehicleBrand = await _context.VehicleBrand.FindAsync(model.VehicleBrandId),
                 VehicleType = await _context.VehicleType.FindAsync(model.VehicleTypeId),
                 VehicleStatus = await _context.VehicleStatus.FindAsync(model.VehicleStatusId),
@@ -34,6 +34,8 @@ namespace MantenimientoVehiculos.Web.Helpers
                 Color = await _context.Color.FindAsync(model.ColorId)
 
             };
+            if (!string.IsNullOrEmpty(path)) vehicle.ImageUrl = path;
+            return vehicle;
         }
 
         public VehicleViewModel ToVehicleViewModel(VehicleEntity vehicle)
@@ -59,6 +61,7 @@ namespace MantenimientoVehiculos.Web.Helpers
                 Fuels = _combosHelper.GetComboFuel(),
                 ColorId=vehicle.Color.Id,
                 Colors=_combosHelper.GetComboColor()
+               
             };
         }
 

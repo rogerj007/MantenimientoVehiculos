@@ -31,8 +31,8 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Range(1980, int.MaxValue, ErrorMessage = "Year must be from 2000")]
         public short Year { get; set; }
 
-        [Display(Name = "Vehicle Info")]
-        public string VehicleInfoWithColor => $"{VehicleBrand.VehicleBrand} {Plaque} - {Color.Color}";
+        //[Display(Name = "Vehicle Info")]
+        //public string VehicleInfoWithColor => $"{VehicleBrand.VehicleBrand} {Plaque} - {Color.Color}";
 
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }

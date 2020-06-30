@@ -26,6 +26,9 @@
                                 @Html.DisplayNameFor(model => model.Component)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.Code)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.CreationDate)
                             </th>
                             <th>
@@ -41,6 +44,9 @@
 
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Component)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CreationDateLocal)
