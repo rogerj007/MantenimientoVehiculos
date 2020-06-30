@@ -37,7 +37,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
         [Display(Name = "User Type")]
         public UserType UserType { get; set; }
-        public bool Enable { get; set; }
+        public bool Enable { get; set; } = false;
         
         [DataType(DataType.DateTime)]
         [Display(Name = "Creation Date")]

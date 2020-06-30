@@ -51,9 +51,9 @@ namespace MantenimientoVehiculos.Web.Data
 
         private async Task CheckUsersAsync()
         {
-            var admin = await CheckUserAsync("1010", "Roger", "Jaimes", "rogerjh@mercapro.com", "0998585584", "Calle Luna Calle Sol", UserType.Admin);
-            var supervisor = await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol", UserType.Supervisor);
-            var user1 = await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", UserType.User);
+            var admin = await CheckUserAsync("1010", "Roger", "Jaimes", "rogerjh@mercapro.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Admin);
+            var supervisor = await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Supervisor);
+            var user1 = await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,UserType.User);
         }
 
         private async Task<UserEntity> CheckUserAsync(
@@ -63,6 +63,7 @@ namespace MantenimientoVehiculos.Web.Data
             string email,
             string phone,
             string address,
+            bool enable,
             UserType userType)
         {
             var user = await _userHelper.GetUserByEmailAsync(email);
@@ -77,6 +78,7 @@ namespace MantenimientoVehiculos.Web.Data
                     PhoneNumber = phone,
                     Address = address,
                     Document = document,
+                    Enable=enable,
                     UserType = userType
                 };
 

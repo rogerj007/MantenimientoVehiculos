@@ -9,6 +9,7 @@ using MantenimientoVehiculos.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
@@ -62,9 +63,6 @@ namespace MantenimientoVehiculos.Web.Controllers
             return View(userEntity);
         }
 
-        // POST: Color/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, UserEntity userEntity)
@@ -108,7 +106,6 @@ namespace MantenimientoVehiculos.Web.Controllers
             return View(userEntity);
         }
 
-        // GET: Color/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -305,7 +302,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _userHelper.LoginAsync(model);
+                SignInResult result = await _userHelper.LoginAsync(model);
                 if (result.Succeeded)
                 {
                     if (Request.Query.Keys.Contains("ReturnUrl"))

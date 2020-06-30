@@ -57,11 +57,19 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-            return await _signInManager.PasswordSignInAsync(
-                model.Username,
-                model.Password,
-                model.RememberMe,
-                false);
+
+            var user = _userManager.FindByEmailAsync(model.Username).Result;
+            if (user.Enable)
+            {
+                return await _signInManager.PasswordSignInAsync(
+                    model.Username,
+                    model.Password,
+                    model.RememberMe,
+                    false);
+                
+            }
+            return new SignInResult();
+
         }
 
         public async Task LogoutAsync()
