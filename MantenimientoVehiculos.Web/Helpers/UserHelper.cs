@@ -7,6 +7,7 @@ using MantenimientoVehiculos.Web.Data.Entities;
 using MantenimientoVehiculos.Web.Enums;
 using MantenimientoVehiculos.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Helpers
 {
@@ -123,7 +124,8 @@ namespace MantenimientoVehiculos.Web.Helpers
                 PhoneNumber = model.PhoneNumber,
                 UserName = model.Username,
                 UserType = model.UserTypeId == 1 ? UserType.Supervisor : UserType.User,
-                UserFunction = await _context.UserFunction.FindAsync(model.UserFuncionId)
+                UserFunction = await _context.UserFunction.FindAsync(model.UserFuncionId),
+                Enable=false
             };
 
             IdentityResult result = await _userManager.CreateAsync(userEntity, model.Password);
@@ -137,9 +139,12 @@ namespace MantenimientoVehiculos.Web.Helpers
             return newUser;
         }
 
-        public Task<UserEntity> GetUserAsync(Guid userId)
+        public async Task<UserEntity> GetUserAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .Include(u => u.UserFunction)
+               // .Include(u => u.UserType)
+                .FirstOrDefaultAsync(u => u.Id == userId.ToString());
         }
     }
 

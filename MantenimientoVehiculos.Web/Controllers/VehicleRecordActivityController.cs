@@ -31,6 +31,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             return View(await _context.VehicleRecordActivities
                                         .Include(v=>v.Vehicle).ThenInclude(c=>c.Color)
                                         .Include(v => v.Vehicle).ThenInclude(c => c.VehicleBrand)
+                                        //.Where(v=>v.Vehicle.VehicleStatus.Id.Equals(1))//Solo Operativo
                                         .ToListAsync());
         }
 
@@ -57,7 +58,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             var model = new VehicleRecordActivityViewModel
             {
-                Vehicles=_combosHelper.GetComboVehicles()
+                Vehicles=_combosHelper.GetComboVehicles(true)
             };
 
             return View(model);
@@ -74,7 +75,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var vehicleRecordActivity = await _converterHelper.ToVehicleRecordActivityAsync(model, true);
+                    var vehicleRecordActivity = await _converterHelper.ToVehicleRecordActivityAsync(model);
                     vehicleRecordActivity.CreationDate = DateTime.UtcNow;
                     _context.Add(vehicleRecordActivity);
                     await _context.SaveChangesAsync();
@@ -95,7 +96,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 }
             }
 
-            model.Vehicles = _combosHelper.GetComboVehicles();
+            model.Vehicles = _combosHelper.GetComboVehicles(true);
             return View(model);
         }
 

@@ -2,6 +2,8 @@
 using System.Linq;
 using MantenimientoVehiculos.Web.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace MantenimientoVehiculos.Web.Helpers
 {
@@ -16,16 +18,24 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         #region Users
 
-        public IEnumerable<SelectListItem> GetComboRoles()
+        public IEnumerable<SelectListItem> GetComboRoles(bool admin=false)
         {
-            var list = new List<SelectListItem>
+            if(admin)
+                return new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "0", Text = "[Select a role...]" },
+                    new SelectListItem { Value = "1", Text = "Admin" },
+                    new SelectListItem { Value = "2", Text = "Supervisor" },
+                    new SelectListItem { Value = "3", Text = "User" }
+                };
+            return new List<SelectListItem>
             {
                 new SelectListItem { Value = "0", Text = "[Select a role...]" },
                 new SelectListItem { Value = "1", Text = "Supervisor" },
                 new SelectListItem { Value = "2", Text = "User" }
             };
 
-            return list;
+
         }
 
         public IEnumerable<SelectListItem> GetComboUserFuncion()
@@ -165,9 +175,25 @@ namespace MantenimientoVehiculos.Web.Helpers
             return list;
         }
 
-        public IEnumerable<SelectListItem> GetComboVehicles()
+        public IEnumerable<SelectListItem> GetComboVehicles(bool operative=false)
         {
-            var list = _context.Vehicle.Select(t => new SelectListItem
+            List<SelectListItem> list;
+            
+
+            if(operative)
+                list = _context.Vehicle
+                    .Include(v=>v.VehicleStatus)
+                    .Where(v => v.VehicleStatus.Id==1)
+                    .Select(t => new SelectListItem
+                    {
+                        Text = t.Plaque,
+                        Value = $"{t.Id}"
+                    })
+                    
+                    .OrderBy(t => t.Text)
+                    .ToList();
+            else
+                list = _context.Vehicle.Select(t => new SelectListItem
                 {
                     Text = t.Plaque,
                     Value = $"{t.Id}"

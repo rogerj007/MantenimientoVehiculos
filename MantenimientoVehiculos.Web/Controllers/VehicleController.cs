@@ -104,7 +104,6 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var path = string.Empty;
-
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
                         var guid = Guid.NewGuid().ToString();
@@ -117,7 +116,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                         }
                         path = $"~/images/Vechicles/{file}";
                     }
-                    var vehicle = await _converterHelper.ToVehicleAsync(model, path, true);
+                    var vehicle = await _converterHelper.ToVehicleAsync(model, path);
                     vehicle.CreationDate = DateTime.UtcNow;
                     _context.Add(vehicle);
                     await _context.SaveChangesAsync();
@@ -211,7 +210,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
                 try
                 {
-                    var vehicle = await _converterHelper.ToVehicleAsync(model, path, false);
+                    var vehicle = await _converterHelper.ToVehicleAsync(model, path);
                     vehicle.ModificationDate = DateTime.UtcNow;
                     _context.Update(vehicle);
                     await _context.SaveChangesAsync();

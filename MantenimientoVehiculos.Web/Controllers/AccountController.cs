@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MantenimientoVehiculos.Web.Data;
@@ -19,12 +20,14 @@ namespace MantenimientoVehiculos.Web.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IImageHelper _imageHelper;
         private readonly ICombosHelper _combosHelper;
+        private readonly IConverterHelper _converterHelper;
         private readonly IMailHelper _mailHelper;
 
         public AccountController(DataContext dataContext,
                                 IUserHelper userHelper,
                                 IImageHelper imageHelper,
                                 ICombosHelper combosHelper,
+                                IConverterHelper converterHelper,
                                 IMailHelper mailHelper 
         )
         {
@@ -32,6 +35,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             _userHelper = userHelper;
             _imageHelper = imageHelper;
             _combosHelper = combosHelper;
+            _converterHelper = converterHelper;
             _mailHelper = mailHelper;
         }
 
@@ -54,56 +58,66 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 return NotFound();
             }
-
-            var userEntity = await _dataContext.Users.FindAsync(id);
+            var userEntity = await _userHelper.GetUserAsync(new Guid(id));
             if (userEntity == null)
             {
                 return NotFound();
             }
-            return View(userEntity);
+
+            var model = _converterHelper.ToEditListUserViewModel(userEntity);
+            return View(model);
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, UserEntity userEntity)
+        public async Task<IActionResult> Edit(string id, EditListUserViewModel model)
         {
-            if (id != userEntity.Id)
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
+            
+
             if (ModelState.IsValid)
             {
+                var path = string.Empty;
+                if (model.PictureFile != null && model.PictureFile.Length > 0)
+                {
+                    var guid = Guid.NewGuid().ToString();
+                    var file = $"{guid}.jpg";
+
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\Users", file);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await model.PictureFile.CopyToAsync(stream);
+                    }
+                    path = $"~/images/Users/{file}";
+                }
+
                 try
                 {
-                    var user = _dataContext.Users.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    user.Result.ModificationDate = DateTime.UtcNow;
-                    try
-                    {
-                        await _dataContext.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
-                    }
-                    catch (Exception e)
-                    {
-                        if (e.InnerException != null)
-                            ModelState.AddModelError(string.Empty,
-                                e.InnerException != null && e.InnerException.Message.Contains("duplicate")
-                                    ? "Already exists row"
-                                    : e.InnerException.Message);
-                    }
+                    var user =await _converterHelper.ToUserAsync(model, path);
+                    _dataContext.Update(user);
+                    await _dataContext.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    //if (!ColorEntityExists(colorEntity.Id))
-                    //{
-                    //    return NotFound();
-                    //}
-
-                    //throw;
+                    if (e.InnerException != null)
+                        ModelState.AddModelError(string.Empty,
+                            e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                ? "Already exists row"
+                                : e.InnerException.Message);
                 }
+              
 
             }
-            return View(userEntity);
+
+            model.UserTypes = _combosHelper.GetComboRoles(true);
+            model.UserFuncion = _combosHelper.GetComboUserFuncion();
+            return View(model);
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -144,14 +158,14 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                string path = string.Empty;
+                var path = string.Empty;
 
                 if (model.PictureFile != null)
                 {
                     path = await _imageHelper.UploadImageAsync(model.PictureFile, "Users");
                 }
 
-                UserEntity user = await _userHelper.AddUserAsync(model, path);
+                var user = await _userHelper.AddUserAsync(model, path);
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "This email is already used.");
@@ -279,7 +293,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            UserEntity user = await _userHelper.GetUserAsync(new Guid(userId));
+            var user = await _userHelper.GetUserAsync(new Guid(userId));
             if (user == null)
             {
                 return NotFound();

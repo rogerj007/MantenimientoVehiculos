@@ -6,12 +6,16 @@ namespace MantenimientoVehiculos.Web.Helpers
 {
     public interface IConverterHelper
     {
-        Task<VehicleEntity> ToVehicleAsync(VehicleViewModel model, string path, bool isNew);
+        Task<VehicleEntity> ToVehicleAsync(VehicleViewModel model, string path);
 
         VehicleViewModel ToVehicleViewModel(VehicleEntity vehicle);
 
-        Task<VehicleRecordActivityEntity> ToVehicleRecordActivityAsync(VehicleRecordActivityViewModel model, bool isNew);
+        Task<VehicleRecordActivityEntity> ToVehicleRecordActivityAsync(VehicleRecordActivityViewModel model);
 
         VehicleRecordActivityViewModel ToVehicleRecordActivityViewModel(VehicleRecordActivityEntity vehicle);
+
+        Task<UserEntity> ToUserAsync(EditListUserViewModel model,string path);
+
+        EditListUserViewModel ToEditListUserViewModel(UserEntity model);
     }
 }

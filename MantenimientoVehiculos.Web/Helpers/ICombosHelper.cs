@@ -5,7 +5,7 @@ namespace MantenimientoVehiculos.Web.Helpers
 {
     public interface ICombosHelper
     {
-        IEnumerable<SelectListItem> GetComboRoles();
+        IEnumerable<SelectListItem> GetComboRoles(bool admin=false);
 
         IEnumerable<SelectListItem> GetComboUserFuncion();
 
@@ -21,6 +21,6 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         IEnumerable<SelectListItem> GetComboCountry();
 
-        IEnumerable<SelectListItem> GetComboVehicles();
+        IEnumerable<SelectListItem> GetComboVehicles(bool operative=false);
     }
 }
