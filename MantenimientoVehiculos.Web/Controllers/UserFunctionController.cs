@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using MantenimientoVehiculos.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MantenimientoVehiculos.Web.Controllers
@@ -15,10 +16,12 @@ namespace MantenimientoVehiculos.Web.Controllers
     public class UserFunctionController : Controller
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public UserFunctionController(DataContext context)
+        public UserFunctionController(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         // GET: JobTitle
@@ -60,6 +63,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                jobTitleEntity.ModifiedBy = user;
                 jobTitleEntity.Name = jobTitleEntity.Name.ToUpper();
                 jobTitleEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(jobTitleEntity);
@@ -113,11 +118,11 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    
-
-                    var jobTitle = _context.UserFunction.FirstOrDefaultAsync(j => j.Id.Equals(id));
-                    jobTitle.Result.Name = jobTitleEntity.Name.ToUpper();
-                    jobTitle.Result.ModifiedDate = DateTime.UtcNow;
+                    var jobTitle = _context.UserFunction.FirstOrDefaultAsync(j => j.Id.Equals(id)).Result;
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                    jobTitle.ModifiedBy = user;
+                    jobTitle.Name = jobTitleEntity.Name.ToUpper();
+                    jobTitle.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();

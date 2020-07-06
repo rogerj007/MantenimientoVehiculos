@@ -113,9 +113,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var color = _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    color.Result.Name= colorEntity.Name.ToUpper();
-                    color.Result.ModifiedDate = DateTime.UtcNow;
+                    var color =await _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
+                    color.Name= colorEntity.Name.ToUpper();
+                    color.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();

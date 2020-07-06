@@ -9,21 +9,18 @@ namespace MantenimientoVehiculos.Web.Data.Entities.Base
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public T Id { get; set; }
-        object IEntity.Id { get; set; }
+
+        object IEntity.Id { get; } //  set; }
 
         [Column(TypeName = "nvarchar(150)")]
         [StringLength(150, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
        
         public abstract string Name { get; set; }
 
-        private DateTime? _createdDate;
         [Column(TypeName = "datetime2")]
         [DataType(DataType.DateTime)]
-        public DateTime CreatedDate
-        {
-            get => _createdDate ?? DateTime.UtcNow;
-            set => _createdDate = value;
-        }
+        public DateTime CreatedDate { get; set; }
+
         public DateTime CreatedDateLocal => CreatedDate.ToLocalTime();
 
         [Column(TypeName = "datetime2")]
@@ -39,6 +36,14 @@ namespace MantenimientoVehiculos.Web.Data.Entities.Base
 
         [Timestamp]
         public byte[] Version { get; set; }
-       
+
+        public override bool Equals(object obj)
+        {
+            return (obj is BaseEntity<T> entity) && (entity.GetType() == GetType()) && (entity.Id.Equals(Id));
+        }
+        
+
+
+
     }
 }

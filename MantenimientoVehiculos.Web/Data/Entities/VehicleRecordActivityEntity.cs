@@ -20,7 +20,8 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Range(1, int.MaxValue, ErrorMessage = "Register activity 'Km/Hours'")]
         public long KmHr { get; set; }
-        public UserEntity User { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public VehicleEntity Vehicle { get; set; }
     }
 }

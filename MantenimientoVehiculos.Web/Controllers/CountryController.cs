@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using MantenimientoVehiculos.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MantenimientoVehiculos.Web.Controllers
@@ -15,10 +16,12 @@ namespace MantenimientoVehiculos.Web.Controllers
     public class CountryController : Controller
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public CountryController(DataContext context)
+        public CountryController(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         // GET: Country
@@ -55,6 +58,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                countryEntity.CreatedBy = user;
                 countryEntity.Name = countryEntity.Name.ToUpper();
                 countryEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(countryEntity);
@@ -108,9 +113,11 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    country.Result.Name = countryEntity.Name.ToUpper();
-                    country.Result.ModifiedDate = DateTime.UtcNow;
+                    var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id)).Result;
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                    country.ModifiedBy = user;
+                    country.Name = countryEntity.Name.ToUpper();
+                    country.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();

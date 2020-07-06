@@ -17,12 +17,17 @@ namespace MantenimientoVehiculos.Web.Controllers
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IUserHelper _userHelper;
 
-        public VehicleRecordActivityController(DataContext context, ICombosHelper combosHelper, IConverterHelper converterHelper)
+        public VehicleRecordActivityController(DataContext context,
+                                                ICombosHelper combosHelper,
+                                                IConverterHelper converterHelper,
+                                                IUserHelper userHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _userHelper = userHelper;
         }
 
         // GET: VehicleRecordActivity
@@ -75,8 +80,10 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
                     var vehicleRecordActivity = await _converterHelper.ToVehicleRecordActivityAsync(model);
                     vehicleRecordActivity.CreatedDate = DateTime.UtcNow;
+                    vehicleRecordActivity.ModifiedBy = user;
                     _context.Add(vehicleRecordActivity);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -122,34 +129,33 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, VehicleRecordActivityEntity vehicleRecordActivityEntity)
+        public async Task<IActionResult> Edit(long id, VehicleRecordActivityEntity model)
         {
-            if (id != vehicleRecordActivityEntity.Id)
+            if (id != model.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            try
             {
-                try
-                {
-                    _context.Update(vehicleRecordActivityEntity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VehicleRecordActivityEntityExists(vehicleRecordActivityEntity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                var vehicleRecord = await _context.VehicleRecordActivities.SingleOrDefaultAsync(c => c.Id.Equals(id));
+                vehicleRecord.KmHr = model.KmHr;
+                vehicleRecord.ModifiedBy = user;
+                vehicleRecord.ModifiedDate = DateTime.UtcNow;
+                _context.Update(vehicleRecord);
+
+                await _context.SaveChangesAsync().ConfigureAwait(true);
             }
-            return View(vehicleRecordActivityEntity);
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!VehicleRecordActivityEntityExists(model.Id))
+                {
+                    return NotFound();
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: VehicleRecordActivity/Delete/5

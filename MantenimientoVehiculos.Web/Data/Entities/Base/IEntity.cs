@@ -9,7 +9,8 @@ namespace MantenimientoVehiculos.Web.Data.Entities.Base
   
     public interface IEntity : IModifiableEntity
     {
-        object Id { get; set; }
+        object Id { get; }        //set; }
+
         DateTime CreatedDate { get; set; }
         DateTime? ModifiedDate { get; set; }
         UserEntity CreatedBy { get; set; }
