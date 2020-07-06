@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MantenimientoVehiculos.Web.Data;
+using MantenimientoVehiculos.Web.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -42,7 +44,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var list = _context.UserFunction.Select(t => new SelectListItem
                 {
-                    Text = t.UserFunction,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -59,13 +61,36 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         #endregion
 
+        public IEnumerable<SelectListItem> GetComboListMaintenance()
+        {
+            //var list = (from MaintenanceType item in Enum.GetValues(typeof(MaintenanceType))
+            //    select new SelectListItem
+            //    {
+            //        Value = item.ToString(),
+            //        Text= (MaintenanceType)item.ToString()
+            //        //  Text= ((MaintenanceType)item.ToString()).ToString()
+            //    }).ToList();
 
+            //list.Insert(0, new SelectListItem
+            //{
+            //    Text = "[Select a Maintenance...]",
+            //    Value = "0"
+            //});
+
+            //return list;
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Value = "0", Text = "[Select a Maintenance...]" },
+                new SelectListItem { Value = "1", Text = "Corrective" },
+                new SelectListItem { Value = "2", Text = "Preventive" }
+            };
+        }
 
         public IEnumerable<SelectListItem> GetComboBrandVehicle()
         {
             var list = _context.VehicleBrand.Select(t => new SelectListItem
                 {
-                    Text = t.VehicleBrand,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -84,7 +109,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var list = _context.Color.Select(t => new SelectListItem
                 {
-                    Text = t.Color,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -103,7 +128,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var list = _context.VehicleType.Select(t => new SelectListItem
                 {
-                    Text = t.VehicleType,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -122,7 +147,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var list = _context.Fuel.Select(t => new SelectListItem
                 {
-                    Text = t.Fuel,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -141,7 +166,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var list = _context.VehicleStatus.Select(t => new SelectListItem
                 {
-                    Text = t.VehicleStatus,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -160,7 +185,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var list = _context.Country.Select(t => new SelectListItem
                 {
-                    Text = t.Country,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -186,7 +211,7 @@ namespace MantenimientoVehiculos.Web.Helpers
                     .Where(v => v.VehicleStatus.Id==1)
                     .Select(t => new SelectListItem
                     {
-                        Text = t.Plaque,
+                        Text = t.Name,
                         Value = $"{t.Id}"
                     })
                     
@@ -195,7 +220,7 @@ namespace MantenimientoVehiculos.Web.Helpers
             else
                 list = _context.Vehicle.Select(t => new SelectListItem
                 {
-                    Text = t.Plaque,
+                    Text = t.Name,
                     Value = $"{t.Id}"
                 })
                 .OrderBy(t => t.Text)
@@ -209,6 +234,9 @@ namespace MantenimientoVehiculos.Web.Helpers
 
             return list;
         }
+
+
+
     }
 
 }

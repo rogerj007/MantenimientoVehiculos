@@ -60,8 +60,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                vehicleStatusEntity.VehicleStatus = vehicleStatusEntity.VehicleStatus.ToUpper();
-                vehicleStatusEntity.CreationDate = DateTime.UtcNow;
+                vehicleStatusEntity.Name = vehicleStatusEntity.Name.ToUpper();
+                vehicleStatusEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(vehicleStatusEntity);
                 try
                 {
@@ -81,7 +81,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleStatus/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -101,7 +101,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, VehicleStatusEntity vehicleStatusEntity)
+        public async Task<IActionResult> Edit(byte id, VehicleStatusEntity vehicleStatusEntity)
         {
             if (id != vehicleStatusEntity.Id)
             {
@@ -113,8 +113,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var status = _context.VehicleStatus.FirstOrDefaultAsync(s => s.Id.Equals(id));
-                    status.Result.ModificationDate = vehicleStatusEntity.ModificationDate;
-                    status.Result.VehicleStatus = vehicleStatusEntity.VehicleStatus.ToUpper();
+                    status.Result.ModifiedDate = vehicleStatusEntity.ModifiedDate;
+                    status.Result.Name = vehicleStatusEntity.Name.ToUpper();
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -143,7 +143,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleStatus/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {
@@ -162,7 +162,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
 
-        private bool VehicleStatusEntityExists(int id)
+        private bool VehicleStatusEntityExists(byte id)
         {
             return _context.VehicleStatus.Any(e => e.Id == id);
         }

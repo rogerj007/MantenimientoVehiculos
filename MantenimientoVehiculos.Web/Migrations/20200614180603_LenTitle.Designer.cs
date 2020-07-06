@@ -30,9 +30,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                     b.Property<string>("Color")
                         .IsRequired();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.HasKey("Id");
 
@@ -51,9 +51,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                     b.Property<string>("Country")
                         .IsRequired();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.HasKey("Id");
 
@@ -69,13 +69,13 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Fuel")
                         .IsRequired()
                         .HasMaxLength(20);
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.HasKey("Id");
 
@@ -91,13 +91,13 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.HasKey("Id");
 
@@ -113,9 +113,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.Property<string>("VehicleType")
                         .IsRequired()
@@ -135,9 +135,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.Property<string>("VehicleBrand")
                         .IsRequired()
@@ -165,13 +165,13 @@ namespace MantenimientoVehiculos.Web.Migrations
 
                     b.Property<int>("CountryId");
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
                     b.Property<int>("Cylinder");
 
                     b.Property<int>("FuelId");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.Property<string>("MotorSerial")
                         .IsRequired()
@@ -208,9 +208,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.Property<string>("VehicleStatus")
                         .IsRequired()

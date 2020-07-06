@@ -10,35 +10,35 @@ namespace MantenimientoVehiculos.Web.Models
     {
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Vehicle Brand")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Vehicle Brand.")]
-        public int VehicleBrandId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Vehicle Brand.")]
+        public byte VehicleBrandId { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Vehicle Type")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Vehicle Type.")]
-        public int VehicleTypeId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Vehicle Type.")]
+        public byte VehicleTypeId { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Vehicle Status")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Vehicle Type.")]
-        public int VehicleStatusId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Vehicle Type.")]
+        public byte VehicleStatusId { get; set; }
 
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Country")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Country.")]
-        public int CountryId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Country.")]
+        public byte CountryId { get; set; }
 
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Fuel")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Fuel.")]
-        public int FuelId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Fuel.")]
+        public byte FuelId { get; set; }
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Color")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Color.")]
-        public int ColorId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Color.")]
+        public byte ColorId { get; set; }
 
 
 

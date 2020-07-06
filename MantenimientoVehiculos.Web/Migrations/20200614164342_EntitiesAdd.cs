@@ -27,8 +27,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Fuel = table.Column<string>(maxLength: 20, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,8 +42,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     JobTitle = table.Column<string>(maxLength: 25, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,8 +57,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     VehicleType = table.Column<string>(maxLength: 25, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -72,8 +72,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     VehicleBrand = table.Column<string>(maxLength: 25, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -87,8 +87,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     VehicleStatus = table.Column<string>(maxLength: 15, nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -106,8 +106,8 @@ namespace MantenimientoVehiculos.Web.Migrations
                     Chassis = table.Column<string>(maxLength: 25, nullable: false),
                     Cylinder = table.Column<int>(nullable: false),
                     Year = table.Column<short>(nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: true),
                     VehicleBrandId = table.Column<int>(nullable: false),
                     VehicleTypeId = table.Column<int>(nullable: false),
                     CountryId = table.Column<int>(nullable: false),

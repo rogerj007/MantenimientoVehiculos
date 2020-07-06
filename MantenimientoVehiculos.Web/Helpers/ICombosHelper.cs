@@ -22,5 +22,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         IEnumerable<SelectListItem> GetComboCountry();
 
         IEnumerable<SelectListItem> GetComboVehicles(bool operative=false);
+
+        IEnumerable<SelectListItem> GetComboListMaintenance();
     }
 }

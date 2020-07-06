@@ -26,7 +26,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleBrand/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(byte? id)
         {
             if (id == null)
             {
@@ -58,8 +58,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                vehicleBrandEntity.VehicleBrand = vehicleBrandEntity.VehicleBrand.ToUpper();
-                vehicleBrandEntity.CreationDate = DateTime.UtcNow;
+                vehicleBrandEntity.Name = vehicleBrandEntity.Name.ToUpper();
+                vehicleBrandEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(vehicleBrandEntity);
                 try
                 {
@@ -79,7 +79,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleBrand/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -99,7 +99,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  VehicleBrandEntity vehicleBrandEntity)
+        public async Task<IActionResult> Edit(byte id,  VehicleBrandEntity vehicleBrandEntity)
         {
             if (id != vehicleBrandEntity.Id)
             {
@@ -111,8 +111,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var brand = _context.VehicleBrand.FirstOrDefaultAsync(b=>b.Id.Equals(id));
-                    brand.Result.VehicleBrand = vehicleBrandEntity.VehicleBrand;
-                    brand.Result.ModificationDate = DateTime.UtcNow;
+                    brand.Result.Name = vehicleBrandEntity.Name;
+                    brand.Result.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -143,7 +143,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleBrand/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {

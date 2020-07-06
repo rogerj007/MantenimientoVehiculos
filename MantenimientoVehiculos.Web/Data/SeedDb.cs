@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MantenimientoVehiculos.Web.Enums;
 using MantenimientoVehiculos.Web.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace MantenimientoVehiculos.Web.Data
 {
@@ -24,6 +25,11 @@ namespace MantenimientoVehiculos.Web.Data
         {
             await _dataContext.Database.EnsureCreatedAsync();
 
+            //Roles
+            await CheckRolesAsync();
+            await CheckUsersAsync();
+
+
             //Variables
             await CheckCountryAsync();
             await CheckComponetsAsync();
@@ -34,12 +40,12 @@ namespace MantenimientoVehiculos.Web.Data
             await CheckVehiculeStatusAsync();
             await CheckVehiculeBrandAsync();
 
-            //Roles
-            await CheckRolesAsync();
-            await CheckUsersAsync();
+            //Create Events
+            await CheckVehicleAsync();
+
         }
 
-       
+
 
 
         private async Task CheckRolesAsync()
@@ -51,9 +57,9 @@ namespace MantenimientoVehiculos.Web.Data
 
         private async Task CheckUsersAsync()
         {
-            var admin = await CheckUserAsync("1010", "Roger", "Jaimes", "rogerjh@mercapro.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Admin);
-            var supervisor = await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Supervisor);
-            var user1 = await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,UserType.User);
+           await CheckUserAsync("1010", "Roger", "Jaimes", "rogerjh@mercapro.com", "0998585584", "Calle Luna Calle Sol",true,1, UserType.Admin);
+           await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true,2, UserType.Supervisor);
+           await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,3,UserType.User);
         }
 
         private async Task<UserEntity> CheckUserAsync(
@@ -64,27 +70,30 @@ namespace MantenimientoVehiculos.Web.Data
             string phone,
             string address,
             bool enable,
-            UserType userType)
+            byte userFunctionId,
+            UserType userType
+            
+            )
         {
             var user = await _userHelper.GetUserByEmailAsync(email);
-            if (user == null)
+          //  var userFunction = await _dataContext.UserFunction.FirstAsync(u => u.Id.Equals(userFunctionId));
+            if (user != null) return user;
+            user = new UserEntity
             {
-                user = new UserEntity
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = email,
-                    UserName = email,
-                    PhoneNumber = phone,
-                    Address = address,
-                    Document = document,
-                    Enable=enable,
-                    UserType = userType
-                };
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                UserName = email,
+                PhoneNumber = phone,
+                Address = address,
+                Document = document,
+                Enable=enable,
+                //UserFunction= userFunction,
+                UserType = userType
+            };
 
-                await _userHelper.AddUserAsync(user, "123456");
-                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
-            }
+            await _userHelper.AddUserAsync(user, "123456");
+            await _userHelper.AddUserToRoleAsync(user, userType.ToString());
 
             return user;
         }
@@ -97,16 +106,16 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Component.Any())
             {
                 await _dataContext.Component.AddRangeAsync(
-                    new ComponentEntity { Component = "FILTRO TRAMPA DE AGUA",Code="xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO DE ACEITE", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO ACEITE HIDRAULICO", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO DE AIRE", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO DE AIRE SECUNDARIO", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE PRIMARIO", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO COMBUSTIBLE SECUNDARIO", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO RACOR", Code = "xxxx", CreationDate = DateTime.UtcNow },
-                    new ComponentEntity { Component = "FILTRO SECADOR", Code = "xxxx", CreationDate = DateTime.UtcNow }
+                    new ComponentEntity { Name = "FILTRO TRAMPA DE AGUA",Code="xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO DE ACEITE", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO ACEITE HIDRAULICO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO DE AIRE", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO DE AIRE SECUNDARIO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE PRIMARIO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE SECUNDARIO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO RACOR", Code = "xxxx", CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO SECADOR", Code = "xxxx", CreatedDate = DateTime.UtcNow }
 
                 );
                 await _dataContext.SaveChangesAsync();
@@ -117,14 +126,14 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.VehicleBrand.Any())
             {
                 await _dataContext.VehicleBrand.AddRangeAsync(
-                    new VehicleBrandEntity { VehicleBrand = "CHEVROLET", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "KENWORTH", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "HINO MOTORS", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "TOYOTA", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "MAZDA", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "CATERPILLAR", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "KOMATSU", CreationDate = DateTime.UtcNow },
-                    new VehicleBrandEntity { VehicleBrand = "JOHN DEERE", CreationDate = DateTime.UtcNow }
+                    new VehicleBrandEntity { Name = "CHEVROLET", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "KENWORTH", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "HINO MOTORS", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "TOYOTA", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "MAZDA", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "CATERPILLAR", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "KOMATSU", CreatedDate = DateTime.UtcNow },
+                    new VehicleBrandEntity { Name = "JOHN DEERE", CreatedDate = DateTime.UtcNow }
 
                 );
                 await _dataContext.SaveChangesAsync();
@@ -136,9 +145,9 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.VehicleStatus.Any())
             {
                 await _dataContext.VehicleStatus.AddRangeAsync(
-                    new VehicleStatusEntity { VehicleStatus = "OPERATIVO", CreationDate = DateTime.UtcNow },
-                    new VehicleStatusEntity { VehicleStatus = "DAÑADA", CreationDate = DateTime.UtcNow },
-                    new VehicleStatusEntity { VehicleStatus = "PROCESO DE BAJA", CreationDate = DateTime.UtcNow }
+                    new VehicleStatusEntity { Name = "OPERATIVO", CreatedDate = DateTime.UtcNow },
+                    new VehicleStatusEntity { Name = "DAÑADA", CreatedDate = DateTime.UtcNow },
+                    new VehicleStatusEntity { Name = "PROCESO DE BAJA", CreatedDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
             }
@@ -149,14 +158,14 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.VehicleType.Any())
             {
                 await _dataContext.VehicleType.AddRangeAsync(
-                    new VehicleTypeEntity { VehicleType = "VOLQUETA", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "BUS", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "KABEZAL", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "VEHICULO ESPECIAL", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "ESCAVADORA", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "TRACTOR", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "MOTO NIVELADORA", CreationDate = DateTime.UtcNow },
-                    new VehicleTypeEntity { VehicleType = "RODILLO", CreationDate = DateTime.UtcNow }
+                    new VehicleTypeEntity { Name = "VOLQUETA", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "BUS", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "KABEZAL", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "VEHICULO ESPECIAL", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "ESCAVADORA", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "TRACTOR", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "MOTO NIVELADORA", CreatedDate = DateTime.UtcNow },
+                    new VehicleTypeEntity { Name = "RODILLO", CreatedDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
             }
@@ -167,15 +176,15 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.UserFunction.Any())
             {
                 await _dataContext.UserFunction.AddRangeAsync(
-                    new UserFunctionEntity { UserFunction = "SUPERVISOR DE MANTENIMIENTO MECÁNICO ", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "JEFE DE TALLERES", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "ASISTENTE DE SUPERVISION MTTO. MECÁNICO", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "MECÁNICO", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "AYUDANTE DE MECÁNICA", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "SOLDADOR", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "AYUDANTE SOLDADOR", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "VULCANIZADOR", CreationDate = DateTime.UtcNow },
-                    new UserFunctionEntity { UserFunction = "AYUDANTE DE VUCANIZADOR", CreationDate = DateTime.UtcNow }
+                    new UserFunctionEntity { Name = "SUPERVISOR DE MANTENIMIENTO MECÁNICO ", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "JEFE DE TALLERES", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "ASISTENTE DE SUPERVISION MTTO. MECÁNICO", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "MECÁNICO", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "AYUDANTE DE MECÁNICA", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "SOLDADOR", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "AYUDANTE SOLDADOR", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "VULCANIZADOR", CreatedDate = DateTime.UtcNow },
+                    new UserFunctionEntity { Name = "AYUDANTE DE VUCANIZADOR", CreatedDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
             }
@@ -185,10 +194,10 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Fuel.Any())
             {
                 await _dataContext.Fuel.AddRangeAsync(
-                    new FuelEntity { Fuel = "EXTRA", CreationDate = DateTime.UtcNow },
-                    new FuelEntity { Fuel = "SUPER", CreationDate = DateTime.UtcNow },
-                    new FuelEntity { Fuel = "ECOPAIS", CreationDate = DateTime.UtcNow },
-                    new FuelEntity { Fuel = "DIESEL", CreationDate = DateTime.UtcNow }
+                    new FuelEntity { Name = "EXTRA", CreatedDate = DateTime.UtcNow },
+                    new FuelEntity { Name = "SUPER", CreatedDate = DateTime.UtcNow },
+                    new FuelEntity { Name = "ECOPAIS", CreatedDate = DateTime.UtcNow },
+                    new FuelEntity { Name = "DIESEL", CreatedDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
 
@@ -199,15 +208,15 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Color.Any())
             {
                 await _dataContext.Color.AddRangeAsync(
-                    new ColorEntity { Color = "ROJO", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "NEGRO", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "AZUL", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "AMARILLO", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "NARANJA", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "BLANCO", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "MORADO", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "PLOMO", CreationDate = DateTime.UtcNow },
-                                new ColorEntity { Color = "MARRON", CreationDate = DateTime.UtcNow }
+                    new ColorEntity { Name = "ROJO", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "NEGRO", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "AZUL", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "AMARILLO", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "NARANJA", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "BLANCO", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "MORADO", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "PLOMO", CreatedDate = DateTime.UtcNow },
+                                new ColorEntity { Name = "MARRON", CreatedDate = DateTime.UtcNow }
                     );
                 await _dataContext.SaveChangesAsync();
 
@@ -219,12 +228,12 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Country.Any())
             {
                 await _dataContext.Country.AddRangeAsync(
-                    new CountryEntity { Country = "ECUADOR", CreationDate = DateTime.UtcNow },
-                    new CountryEntity { Country = "COLOMBIA", CreationDate = DateTime.UtcNow },
-                    new CountryEntity { Country = "CHINA", CreationDate = DateTime.UtcNow },
-                    new CountryEntity { Country = "JAPON", CreationDate = DateTime.UtcNow },
-                    new CountryEntity { Country = "TAILANDIA", CreationDate = DateTime.UtcNow },
-                    new CountryEntity { Country = "U.S.A", CreationDate = DateTime.UtcNow }
+                    new CountryEntity { Name = "ECUADOR", CreatedDate = DateTime.UtcNow },
+                    new CountryEntity { Name = "COLOMBIA", CreatedDate = DateTime.UtcNow },
+                    new CountryEntity { Name = "CHINA", CreatedDate = DateTime.UtcNow },
+                    new CountryEntity { Name = "JAPON", CreatedDate = DateTime.UtcNow },
+                    new CountryEntity { Name = "TAILANDIA", CreatedDate = DateTime.UtcNow },
+                    new CountryEntity { Name = "U.S.A", CreatedDate = DateTime.UtcNow }
                 );
                 await _dataContext.SaveChangesAsync();
 
@@ -238,6 +247,8 @@ namespace MantenimientoVehiculos.Web.Data
         {
             if (!_dataContext.Vehicle.Any())
             {
+                var users = await _dataContext.Users.ToListAsync() ;
+                var user = users.FirstOrDefault();
                 var vehicleStatus = _dataContext.VehicleStatus.FirstOrDefault();
                 var vehicleType = _dataContext.VehicleType.FirstOrDefault();
                 var vehicleBrand = _dataContext.VehicleBrand.FirstOrDefault();
@@ -253,12 +264,13 @@ namespace MantenimientoVehiculos.Web.Data
                         Country = country,
                         Color=color, 
                         Fuel=fuel,
-                        Plaque="XXX696",
+                        Name="XXX696",
                         Chassis="XDXDXDXD",
                         Year=2020,
                         MotorSerial="ASDFGHJKL",
                         Cylinder =1515,
-                        CreationDate = DateTime.UtcNow
+                        CreatedDate = DateTime.UtcNow,
+                        CreatedBy= user
                     }
                 );
                 await _dataContext.SaveChangesAsync();

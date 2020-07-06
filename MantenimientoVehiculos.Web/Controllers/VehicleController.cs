@@ -22,12 +22,17 @@ namespace MantenimientoVehiculos.Web.Controllers
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IUserHelper _userHelper;
 
-        public VehicleController(DataContext context, ICombosHelper combosHelper,IConverterHelper converterHelper)
+        public VehicleController(DataContext context,
+                                ICombosHelper combosHelper,
+                                IConverterHelper converterHelper,
+                                IUserHelper userHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
+            _userHelper = userHelper;
         }
 
 
@@ -51,7 +56,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Vehicle/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(short? id)
         {
             if (id == null)
             {
@@ -86,7 +91,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 Countries = _combosHelper.GetComboCountry(),
                 Fuels = _combosHelper.GetComboFuel(),
                 Colors=_combosHelper.GetComboColor(),
-                CreationDate=DateTime.UtcNow
+                CreatedDate=DateTime.UtcNow
             };
 
             return View(model);
@@ -117,7 +122,11 @@ namespace MantenimientoVehiculos.Web.Controllers
                         path = $"~/images/Vechicles/{file}";
                     }
                     var vehicle = await _converterHelper.ToVehicleAsync(model, path);
-                    vehicle.CreationDate = DateTime.UtcNow;
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                    vehicle.Name = vehicle.Name.ToUpper();
+                    vehicle.Chassis = vehicle.Chassis.ToUpper();
+                    vehicle.CreatedBy = user;
+                    vehicle.CreatedDate = DateTime.UtcNow;
                     _context.Add(vehicle);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -151,7 +160,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Vehicle/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(short? id)
         {
             if (id == null)
             {
@@ -210,13 +219,44 @@ namespace MantenimientoVehiculos.Web.Controllers
 
                 try
                 {
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
                     var vehicle = await _converterHelper.ToVehicleAsync(model, path);
-                    vehicle.ModificationDate = DateTime.UtcNow;
-                    _context.Update(vehicle);
+                    vehicle.Name = vehicle.Name.ToUpper();
+                    vehicle.Chassis = vehicle.Chassis.ToUpper();
+                    vehicle.ModifiedDate = DateTime.UtcNow;
+                    vehicle.ModifiedBy = user;
+                    _context.Vehicle.Update(vehicle);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
+                    foreach (var entry in ex.Entries)
+                    {
+                        if (entry.Entity is VehicleEntity)
+                        {
+                            var proposedValues = entry.CurrentValues;
+                            var databaseValues = await entry.GetDatabaseValuesAsync();
+
+                            foreach (var property in proposedValues.Properties)
+                            {
+                                var proposedValue = proposedValues[property];
+                                var databaseValue = databaseValues[property];
+
+                                // TODO: decide which value should be written to database
+                                // proposedValues[property] = <value to be saved>;
+                            }
+
+                            // Refresh original values to bypass next concurrency check
+                            entry.OriginalValues.SetValues(databaseValues);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException(
+                                "Don't know how to handle concurrency conflicts for "
+                                + entry.Metadata.Name);
+                        }
+                    }
+
                     if (!VehicleEntityExists(model.Id))
                     {
                         return NotFound();
@@ -234,7 +274,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Vehicle/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(short? id)
         {
             if (id == null)
             {
@@ -253,7 +293,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleEntityExists(int id)
+        private bool VehicleEntityExists(short id)
         {
             return _context.Vehicle.Any(e => e.Id == id);
         }

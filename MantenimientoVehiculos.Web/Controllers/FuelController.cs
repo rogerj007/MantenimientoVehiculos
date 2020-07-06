@@ -28,7 +28,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Fuel/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(byte? id)
         {
             if (id == null)
             {
@@ -60,8 +60,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                fuelEntity.Fuel = fuelEntity.Fuel.ToUpper();
-                fuelEntity.CreationDate = DateTime.UtcNow;
+                fuelEntity.Name = fuelEntity.Name.ToUpper();
+                fuelEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(fuelEntity);
                 try
                 {
@@ -82,7 +82,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Fuel/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -102,7 +102,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, FuelEntity fuelEntity)
+        public async Task<IActionResult> Edit(byte id, FuelEntity fuelEntity)
         {
             if (id != fuelEntity.Id)
             {
@@ -114,8 +114,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var fuel = _context.Fuel.FirstOrDefaultAsync(f => f.Id.Equals(id));
-                    fuel.Result.Fuel = fuel.Result.Fuel.ToUpper();
-                    fuel.Result.ModificationDate = DateTime.UtcNow;
+                    fuel.Result.Name = fuelEntity.Name.ToUpper();
+                    fuel.Result.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -146,7 +146,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Fuel/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {
@@ -165,7 +165,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FuelEntityExists(int id)
+        private bool FuelEntityExists(byte id)
         {
             return _context.Fuel.Any(e => e.Id == id);
         }

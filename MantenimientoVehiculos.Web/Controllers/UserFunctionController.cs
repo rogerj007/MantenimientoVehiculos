@@ -28,7 +28,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: JobTitle/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(byte? id)
         {
             if (id == null)
             {
@@ -60,8 +60,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                jobTitleEntity.UserFunction = jobTitleEntity.UserFunction.ToUpper();
-                jobTitleEntity.CreationDate = DateTime.UtcNow;
+                jobTitleEntity.Name = jobTitleEntity.Name.ToUpper();
+                jobTitleEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(jobTitleEntity);
                 try
                 {
@@ -82,7 +82,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: JobTitle/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -102,7 +102,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UserFunctionEntity jobTitleEntity)
+        public async Task<IActionResult> Edit(byte id, UserFunctionEntity jobTitleEntity)
         {
             if (id != jobTitleEntity.Id)
             {
@@ -116,8 +116,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                     
 
                     var jobTitle = _context.UserFunction.FirstOrDefaultAsync(j => j.Id.Equals(id));
-                    jobTitle.Result.UserFunction = jobTitleEntity.UserFunction.ToUpper();
-                    jobTitle.Result.ModificationDate = DateTime.UtcNow;
+                    jobTitle.Result.Name = jobTitleEntity.Name.ToUpper();
+                    jobTitle.Result.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -149,7 +149,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: JobTitle/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {
@@ -170,7 +170,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
 
-        private bool JobTitleEntityExists(int id)
+        private bool JobTitleEntityExists(byte id)
         {
             return _context.UserFunction.Any(e => e.Id == id);
         }

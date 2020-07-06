@@ -36,7 +36,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleRecordActivity/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
             {
@@ -76,7 +76,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var vehicleRecordActivity = await _converterHelper.ToVehicleRecordActivityAsync(model);
-                    vehicleRecordActivity.CreationDate = DateTime.UtcNow;
+                    vehicleRecordActivity.CreatedDate = DateTime.UtcNow;
                     _context.Add(vehicleRecordActivity);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -101,7 +101,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleRecordActivity/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
             {
@@ -122,7 +122,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, VehicleRecordActivityEntity vehicleRecordActivityEntity)
+        public async Task<IActionResult> Edit(long id, VehicleRecordActivityEntity vehicleRecordActivityEntity)
         {
             if (id != vehicleRecordActivityEntity.Id)
             {
@@ -153,7 +153,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleRecordActivity/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
             {
@@ -171,7 +171,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleRecordActivityEntityExists(int id)
+        private bool VehicleRecordActivityEntityExists(long id)
         {
             return _context.VehicleRecordActivities.Any(e => e.Id == id);
         }

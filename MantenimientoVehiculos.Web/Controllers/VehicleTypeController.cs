@@ -28,7 +28,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleType/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(byte? id)
         {
             if (id == null)
             {
@@ -60,8 +60,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                typeVehicleEntity.VehicleType = typeVehicleEntity.VehicleType.ToUpper();
-                typeVehicleEntity.CreationDate = DateTime.UtcNow;
+                typeVehicleEntity.Name = typeVehicleEntity.Name.ToUpper();
+                typeVehicleEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(typeVehicleEntity);
                 try
                 {
@@ -82,7 +82,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleType/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -102,7 +102,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, VehicleTypeEntity typeVehicleEntity)
+        public async Task<IActionResult> Edit(byte id, VehicleTypeEntity typeVehicleEntity)
         {
             if (id != typeVehicleEntity.Id)
             {
@@ -114,8 +114,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var typeVehicle = _context.VehicleType.FirstOrDefaultAsync(tv => tv.Id.Equals(id));
-                    typeVehicle.Result.ModificationDate = DateTime.UtcNow;
-                    typeVehicle.Result.VehicleType = typeVehicle.Result.VehicleType.ToUpper();
+                    typeVehicle.Result.ModifiedDate = DateTime.UtcNow;
+                    typeVehicle.Result.Name = typeVehicleEntity.Name.ToUpper();
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -147,7 +147,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleType/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {
@@ -166,7 +166,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleTypeEntityExists(int id)
+        private bool VehicleTypeEntityExists(byte id)
         {
             return _context.VehicleType.Any(e => e.Id == id);
         }

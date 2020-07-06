@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using MantenimientoVehiculos.Web.Data.Entities.Base;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class VehicleMaintenanceDetailEntity : BaseEntity
+    public class VehicleMaintenanceDetailEntity : BaseEntity<long>
     {
-        public VehicleMaintenanceEntity Trip { get; set; }
-
+        [NotMapped]
+        public override string Name { get; set; }
         public ComponentEntity Component { get; set; }
 
     }

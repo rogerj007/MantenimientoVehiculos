@@ -14,6 +14,12 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         VehicleRecordActivityViewModel ToVehicleRecordActivityViewModel(VehicleRecordActivityEntity vehicle);
 
+
+        Task<VehicleMaintenanceEntity> ToVehicleMaintenanceAsync(VehicleMaintenanceViewModel model);
+
+        VehicleMaintenanceViewModel ToVehicleMaintenanceViewModel(VehicleMaintenanceEntity model);
+
+
         Task<UserEntity> ToUserAsync(EditListUserViewModel model,string path);
 
         EditListUserViewModel ToEditListUserViewModel(UserEntity model);

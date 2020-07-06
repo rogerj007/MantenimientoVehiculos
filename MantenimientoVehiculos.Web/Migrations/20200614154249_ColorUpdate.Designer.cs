@@ -30,9 +30,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                     b.Property<string>("Color")
                         .IsRequired();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.HasKey("Id");
 
@@ -48,9 +48,9 @@ namespace MantenimientoVehiculos.Web.Migrations
                     b.Property<string>("Country")
                         .IsRequired();
 
-                    b.Property<DateTime>("CreationDate");
+                    b.Property<DateTime>("CreatedDate");
 
-                    b.Property<DateTime?>("ModificationDate");
+                    b.Property<DateTime?>("ModifiedDate");
 
                     b.HasKey("Id");
 

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using MantenimientoVehiculos.Web.Data.Entities.Base;
 using MantenimientoVehiculos.Web.Enums;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class VehicleMaintenanceEntity: BaseEntity
+    public class VehicleMaintenanceEntity: BaseEntity<long>
     {
-
-        public ICollection<VehicleEntity> Vehicles { get; set; }
+        [NotMapped]
+        public override string Name { get; set; }
 
         [Display(Name = "Maintenance Date")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -28,7 +30,9 @@ namespace MantenimientoVehiculos.Web.Data.Entities
 
         [Display(Name = "User Type")]
         public MaintenanceType MaintenanceType { get; set; }
-        public UserEntity User { get; set; }
+        //public UserEntity User { get; set; }
+
+        public bool Complete { get; set; }
 
         public ICollection<VehicleMaintenanceDetailEntity> VehicleMaintenanceDetail { get; set; }
 

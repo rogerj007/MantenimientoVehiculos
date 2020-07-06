@@ -14,7 +14,7 @@ namespace MantenimientoVehiculos.Web.Migrations
             migrationBuilder.RenameColumn(
                 name: "FechaModificacion",
                 table: "Country",
-                newName: "CreationDate");
+                newName: "CreatedDate");
 
             migrationBuilder.RenameColumn(
                 name: "FechaModificacion",
@@ -24,7 +24,7 @@ namespace MantenimientoVehiculos.Web.Migrations
             migrationBuilder.RenameColumn(
                 name: "FechaCreacion",
                 table: "Colors",
-                newName: "CreationDate");
+                newName: "CreatedDate");
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ModificationDate",
@@ -39,7 +39,7 @@ namespace MantenimientoVehiculos.Web.Migrations
                 table: "Country");
 
             migrationBuilder.RenameColumn(
-                name: "CreationDate",
+                name: "CreatedDate",
                 table: "Country",
                 newName: "FechaModificacion");
 
@@ -49,7 +49,7 @@ namespace MantenimientoVehiculos.Web.Migrations
                 newName: "FechaModificacion");
 
             migrationBuilder.RenameColumn(
-                name: "CreationDate",
+                name: "CreatedDate",
                 table: "Colors",
                 newName: "FechaCreacion");
 

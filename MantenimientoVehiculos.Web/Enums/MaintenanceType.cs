@@ -1,8 +1,12 @@
-﻿namespace MantenimientoVehiculos.Web.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MantenimientoVehiculos.Web.Enums
 {
     public enum MaintenanceType
     {
-        Corrective,
-        Preventive
+        [Display(Name = "Corrective")]
+        Corrective =1,
+        [Display(Name = "Preventive")]
+        Preventive =2
     }
 }

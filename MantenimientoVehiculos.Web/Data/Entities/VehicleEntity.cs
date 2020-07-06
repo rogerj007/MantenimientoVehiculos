@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using MantenimientoVehiculos.Web.Data.Entities.Base;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class VehicleEntity: BaseEntity
+    public class VehicleEntity: BaseEntity<short>
     {
-      
 
-
-        [StringLength(7, MinimumLength = 7, ErrorMessage = "The {0} field must have {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
         [RegularExpression(@"^([A-Za-z]{3}\d{4})$", ErrorMessage = "The field {0} must starts with three characters and ends with numbers.")]
-        public string Plaque { get; set; }
+        [Column("Plaque")]
+        [Display(Name = "Plaque")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        public override string Name { get; set; }
 
         [StringLength(25, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -45,7 +46,8 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public VehicleStatusEntity VehicleStatus { get; set; }
 
         public ICollection<VehicleRecordActivityEntity> VehicleRecordActivities { get; set; }
-        
+
+        public ICollection<VehicleMaintenanceEntity> VehicleMaintenance { get; set; }
 
     }
 }

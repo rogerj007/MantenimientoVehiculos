@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MantenimientoVehiculos.Web.Data.Entities.Base;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class FuelEntity:BaseEntity
+    public class FuelEntity:BaseEntity<byte>
     {
-     
 
+        [Display(Name = "Fuel")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [StringLength(20, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
-        public string Fuel { get; set; }
+        public override string Name { get; set; }
 
-       public ICollection<VehicleEntity> Vehicles { get; set; }
+
+        public ICollection<VehicleEntity> Vehicles { get; set; }
 
     }
 }

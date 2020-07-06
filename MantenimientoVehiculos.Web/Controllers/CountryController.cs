@@ -28,20 +28,18 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Country/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(byte? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
             var countryEntity = await _context.Country
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (countryEntity == null)
             {
                 return NotFound();
             }
-
             return View(countryEntity);
         }
 
@@ -51,17 +49,14 @@ namespace MantenimientoVehiculos.Web.Controllers
             return View();
         }
 
-        // POST: Country/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CountryEntity countryEntity)
         {
             if (ModelState.IsValid)
             {
-                countryEntity.Country = countryEntity.Country.ToUpper();
-                countryEntity.CreationDate = DateTime.UtcNow;
+                countryEntity.Name = countryEntity.Name.ToUpper();
+                countryEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(countryEntity);
                 try
                 {
@@ -82,7 +77,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Country/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -102,7 +97,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CountryEntity countryEntity)
+        public async Task<IActionResult> Edit(byte id, CountryEntity countryEntity)
         {
             if (id != countryEntity.Id)
             {
@@ -114,8 +109,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    country.Result.Country = countryEntity.Country.ToUpper();
-                    country.Result.ModificationDate = DateTime.UtcNow;
+                    country.Result.Name = countryEntity.Name.ToUpper();
+                    country.Result.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -145,7 +140,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Country/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {
@@ -166,7 +161,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
        
 
-        private bool CountryEntityExists(int id)
+        private bool CountryEntityExists(byte id)
         {
             return _context.Country.Any(e => e.Id == id);
         }

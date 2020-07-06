@@ -69,6 +69,19 @@ namespace MantenimientoVehiculos.Web.Helpers
             return dto;
         }
 
+        public Task<VehicleMaintenanceEntity> ToVehicleMaintenanceAsync(VehicleMaintenanceViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public VehicleMaintenanceViewModel ToVehicleMaintenanceViewModel(VehicleMaintenanceEntity model)
+        {
+            var dto = _mapper.Map<VehicleMaintenanceViewModel>(model);
+            dto.ListMaintenanceType = _combosHelper.GetComboListMaintenance();
+            dto.ListVehicles = _combosHelper.GetComboVehicles();
+            return dto;
+        }
+
 
         public async Task<UserEntity> ToUserAsync(EditListUserViewModel model, string path)
         {
@@ -76,7 +89,7 @@ namespace MantenimientoVehiculos.Web.Helpers
             {
 
                 var user = _context.Users.SingleOrDefaultAsync(c => c.Id.Equals(model.Id.ToString())).Result;
-                user.ModificationDate = DateTime.UtcNow;
+                user.ModifiedDate = DateTime.UtcNow;
                 user.Address = model.Address;
                 user.Document = model.Document;
                 user.FirstName = model.FirstName;
@@ -123,11 +136,11 @@ namespace MantenimientoVehiculos.Web.Helpers
               
                 return uwm;
             }
-            catch (AutoMapperMappingException ex)
+            catch (AutoMapperMappingException)
             {
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

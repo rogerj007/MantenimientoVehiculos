@@ -26,7 +26,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Component/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(short? id)
         {
             if (id == null)
             {
@@ -59,8 +59,8 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
                
-                componentEntity.Component = componentEntity.Component.ToUpper();
-                componentEntity.CreationDate = DateTime.UtcNow;
+                componentEntity.Name = componentEntity.Name.ToUpper();
+                componentEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(componentEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -69,7 +69,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Component/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(short? id)
         {
             if (id == null)
             {
@@ -89,7 +89,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ComponentEntity componentEntity)
+        public async Task<IActionResult> Edit(short id, ComponentEntity componentEntity)
         {
             if (id != componentEntity.Id)
             {
@@ -101,10 +101,11 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
 
-                   
-                    componentEntity.Component = componentEntity.Component.ToUpper();
-                    componentEntity.ModificationDate = DateTime.UtcNow;
-                    _context.Update(componentEntity);
+                    var component = _context.Component.FirstOrDefaultAsync(f => f.Id.Equals(id)).Result;
+                    component.Name = componentEntity.Name.ToUpper();
+                    component.Code = componentEntity.Code.ToUpper();
+                    component.ModifiedDate = DateTime.UtcNow;
+                    _context.Update(component);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -113,10 +114,6 @@ namespace MantenimientoVehiculos.Web.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -124,7 +121,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Component/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(short? id)
         {
             if (id == null)
             {
@@ -143,7 +140,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ComponentEntityExists(int id)
+        private bool ComponentEntityExists(short id)
         {
             return _context.Component.Any(e => e.Id == id);
         }

@@ -10,8 +10,8 @@ namespace MantenimientoVehiculos.Web.Models
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Vehicle")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Vehicle ")]
-        public int VehicleId { get; set; }
+        [Range(1, short.MaxValue, ErrorMessage = "You must select a Vehicle ")]
+        public short VehicleId { get; set; }
 
         public IEnumerable<SelectListItem> Vehicles { get; set; }
     }

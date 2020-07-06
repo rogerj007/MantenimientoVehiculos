@@ -1,6 +1,7 @@
 ﻿using MantenimientoVehiculos.Web.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MantenimientoVehiculos.Web.Models;
 
 namespace MantenimientoVehiculos.Web.Data
 {
@@ -14,32 +15,37 @@ namespace MantenimientoVehiculos.Web.Data
             base.OnModelCreating(builder);
 
             builder.Entity<ColorEntity>()
-                .HasIndex(t => t.Color)
+                .HasIndex(t => t.Name)
                 .IsUnique();
 
             builder.Entity<CountryEntity>()
-                .HasIndex(t => t.Country)
+                .HasIndex(t => t.Name)
                 .IsUnique();
 
             builder.Entity<FuelEntity>()
-                .HasIndex(t => t.Fuel)
+                .HasIndex(t => t.Name)
                 .IsUnique();
 
             builder.Entity<UserFunctionEntity>()
-                .HasIndex(t => t.UserFunction)
+                .HasIndex(t => t.Name)
                 .IsUnique();
 
             builder.Entity<VehicleTypeEntity>()
-                .HasIndex(t => t.VehicleType)
+                .HasIndex(t => t.Name)
                 .IsUnique();
 
             builder.Entity<VehicleBrandEntity>()
-                .HasIndex(t => t.VehicleBrand)
+                .HasIndex(t => t.Name)
                 .IsUnique();
 
             builder.Entity<VehicleStatusEntity>()
-                .HasIndex(t => t.VehicleStatus)
+                .HasIndex(t => t.Name)
                 .IsUnique();
+
+            builder.Entity<UserEntity>().HasOne(u => u.UserFunction);
+
+            builder.Entity<UserFunctionEntity>().HasOne(u => u.CreatedBy);
+            builder.Entity<UserFunctionEntity>().HasOne(u => u.ModifiedBy);
         }
 
 
@@ -55,5 +61,6 @@ namespace MantenimientoVehiculos.Web.Data
         public DbSet<VehicleMaintenanceEntity> VehicleMaintenance { get; set; }
         public DbSet<VehicleMaintenanceDetailEntity> VehicleMaintenanceDetail { get; set; }
         public DbSet<VehicleRecordActivityEntity> VehicleRecordActivities { get; set; }
+      
     }
 }

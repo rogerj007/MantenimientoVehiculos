@@ -28,7 +28,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Color/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(byte? id)
         {
             if (id == null)
             {
@@ -61,8 +61,8 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (ModelState.IsValid)
             {
 
-                colorEntity.Color = colorEntity.Color.ToUpper();
-                colorEntity.CreationDate = DateTime.UtcNow;
+                colorEntity.Name = colorEntity.Name.ToUpper();
+                colorEntity.CreatedDate = DateTime.UtcNow;
                 _context.Add(colorEntity);
                 try
                 {
@@ -82,7 +82,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Color/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(byte? id)
         {
             if (id == null)
             {
@@ -102,7 +102,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, ColorEntity colorEntity)
+        public async Task<IActionResult> Edit(byte id, ColorEntity colorEntity)
         {
             if (id != colorEntity.Id)
             {
@@ -114,8 +114,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var color = _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    color.Result.Color= colorEntity.Color.ToUpper();
-                    color.Result.ModificationDate = DateTime.UtcNow;
+                    color.Result.Name= colorEntity.Name.ToUpper();
+                    color.Result.ModifiedDate = DateTime.UtcNow;
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -145,7 +145,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: Color/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(byte? id)
         {
             if (id == null)
             {
@@ -165,7 +165,7 @@ namespace MantenimientoVehiculos.Web.Controllers
       
         }
 
-        private bool ColorEntityExists(int id)
+        private bool ColorEntityExists(byte id)
         {
             return _context.Color.Any(e => e.Id == id);
         }

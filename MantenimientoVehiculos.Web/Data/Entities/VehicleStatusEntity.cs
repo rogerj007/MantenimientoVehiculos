@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MantenimientoVehiculos.Web.Data.Entities.Base;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
-    public class VehicleStatusEntity: BaseEntity
+    public class VehicleStatusEntity: BaseEntity<byte>
     {
-       
-        [StringLength(15, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
+        [Display(Name = "Vehicle Status")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string VehicleStatus { get; set; }
-
-       public ICollection<VehicleEntity> Vehicles { get; set; }
+        public override string Name { get; set; }
+        public ICollection<VehicleEntity> Vehicles { get; set; }
     }
 }
