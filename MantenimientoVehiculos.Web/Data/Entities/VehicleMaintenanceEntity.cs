@@ -19,6 +19,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities
 
         [Display(Name = "Maintenance Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        [DataType(DataType.Date)]
         public DateTime MaintenanceDatenLocal => MaintenanceDate.ToLocalTime();
 
         [Display(Name = "Km - Hours")]
@@ -26,11 +27,11 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Range(1, int.MaxValue, ErrorMessage = "Register activity 'Km/Hours'")]
         public long KmHrMaintenance { get; set; }
 
+        [Display(Name = "Vehicle")]
+        public VehicleEntity Vehicle { get; set; }
 
-
-        [Display(Name = "User Type")]
+        [Display(Name = "Maintenance Type")]
         public MaintenanceType MaintenanceType { get; set; }
-        //public UserEntity User { get; set; }
 
         public bool Complete { get; set; }
 

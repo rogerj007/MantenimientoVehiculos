@@ -144,7 +144,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 vehicleRecord.KmHr = model.KmHr;
                 vehicleRecord.ModifiedBy = user;
                 vehicleRecord.ModifiedDate = DateTime.UtcNow;
-                _context.Update(vehicleRecord);
+                //_context.Update(vehicleRecord);
 
                 await _context.SaveChangesAsync().ConfigureAwait(true);
             }

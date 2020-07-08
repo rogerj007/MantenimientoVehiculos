@@ -31,17 +31,17 @@ namespace MantenimientoVehiculos.Web.Data
 
 
             //Variables
-            await CheckCountryAsync();
-            await CheckComponetsAsync();
-            await CheckColorAsync();
-            await CheckFuelAsync();
-            await CheckUserTypeAsync();
-            await CheckVehiculeTypeAsync();
-            await CheckVehiculeStatusAsync();
-            await CheckVehiculeBrandAsync();
+            await CheckCountryAsync().ConfigureAwait(false);
+            await CheckComponetsAsync().ConfigureAwait(false);
+            await CheckColorAsync().ConfigureAwait(false);
+            await CheckFuelAsync().ConfigureAwait(false);
+            await CheckUserTypeAsync().ConfigureAwait(false);
+            await CheckVehiculeTypeAsync().ConfigureAwait(false);
+            await CheckVehiculeStatusAsync().ConfigureAwait(false);
+            await CheckVehiculeBrandAsync().ConfigureAwait(false);
 
             //Create Events
-            await CheckVehicleAsync();
+           // await CheckVehicleAsync();
 
         }
 
@@ -57,9 +57,9 @@ namespace MantenimientoVehiculos.Web.Data
 
         private async Task CheckUsersAsync()
         {
-           await CheckUserAsync("1010", "Roger", "Jaimes", "rogerjh@mercapro.com", "0998585584", "Calle Luna Calle Sol",true,1, UserType.Admin);
-           await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true,2, UserType.Supervisor);
-           await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,3,UserType.User);
+           await CheckUserAsync("1010", "Admin", "Web", "admin@mercapro.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Admin);
+           //await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true,2, UserType.Supervisor);
+           //await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,3,UserType.User);
         }
 
         private async Task<UserEntity> CheckUserAsync(
@@ -70,7 +70,6 @@ namespace MantenimientoVehiculos.Web.Data
             string phone,
             string address,
             bool enable,
-            byte userFunctionId,
             UserType userType
             
             )

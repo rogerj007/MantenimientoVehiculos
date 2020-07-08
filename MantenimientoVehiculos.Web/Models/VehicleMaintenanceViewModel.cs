@@ -12,14 +12,14 @@ namespace MantenimientoVehiculos.Web.Models
     {
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Vehicle Brand")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Vehicle Brand.")]
-        public int VehicleId { get; set; }
+        [Display(Name = "Vehicle")]
+        [Range(1, short.MaxValue, ErrorMessage = "You must select a Vehicle.")]
+        public short VehicleId { get; set; }
 
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Display(Name = "Vehicle Brand")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a Vehicle Brand.")]
+        [Display(Name = "Maintenance Type")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a Maintenance Type.")]
         public int MaintenanceTypeId { get; set; }
 
 

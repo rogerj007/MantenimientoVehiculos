@@ -235,7 +235,24 @@ namespace MantenimientoVehiculos.Web.Helpers
             return list;
         }
 
+        public IEnumerable<SelectListItem> GetComboComponets()
+        {
+            var list = _context.Component.Select(t => new SelectListItem
+                {
+                    Text = t.Name,
+                    Value = $"{t.Id}"
+                })
+                .OrderBy(t => t.Text)
+                .ToList();
 
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Select a Component...]",
+                Value = "0"
+            });
+
+            return list;
+        }
 
     }
 

@@ -20,7 +20,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
 
-        public VehicleMaintenanceController(DataContext context, 
+        public VehicleMaintenanceController(DataContext context,
                                             ICombosHelper combosHelper,
                                             IConverterHelper converterHelper,
                                             IUserHelper userHelper)
@@ -40,14 +40,16 @@ namespace MantenimientoVehiculos.Web.Controllers
             List<VehicleMaintenanceEntity> mantence;
             if (isAdmin)
                 mantence = await _context.VehicleMaintenance
-                                        .Include(v=>v.VehicleMaintenanceDetail)
+                                        .Include(v => v.Vehicle)
+                                        .Include(v => v.VehicleMaintenanceDetail)
                                         .ToListAsync();
             else
                 mantence = await _context.VehicleMaintenance
+                                        .Include(v => v.Vehicle)
                                         .Include(v => v.VehicleMaintenanceDetail)
-                                        .Where(u=>u.CreatedBy==user)
+                                        .Where(u => u.CreatedBy == user)
                                         .ToListAsync();
-            
+
             return View(mantence);
         }
 
@@ -60,7 +62,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             }
 
             var vehicleMaintenanceEntity = await _context.VehicleMaintenance
-                .FirstOrDefaultAsync(m => m.Id == id);
+                                        .Include(m => m.VehicleMaintenanceDetail)
+                                        .ThenInclude(v => v.Component)
+                                        .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicleMaintenanceEntity == null)
             {
                 return NotFound();
@@ -74,10 +78,10 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             var model = new VehicleMaintenanceViewModel
             {
-                MaintenanceDate=DateTime.Today,
+                MaintenanceDate = DateTime.Today,
                 CreatedDate = DateTime.UtcNow,
-                ListMaintenanceType= _combosHelper.GetComboListMaintenance(),
-                ListVehicles=_combosHelper.GetComboVehicles()
+                ListMaintenanceType = _combosHelper.GetComboListMaintenance(),
+                ListVehicles = _combosHelper.GetComboVehicles()
             };
 
             return View(model);
@@ -92,7 +96,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 var vehicleMantence = await _converterHelper.ToVehicleMaintenanceAsync(model);
                 var user = await _userHelper.GetUserAsync(User.Identity.Name);
                 vehicleMantence.CreatedDate = DateTime.UtcNow;
-                vehicleMantence.CreatedBy= user;
+                vehicleMantence.CreatedBy = user;
                 _context.Add(vehicleMantence);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -102,7 +106,7 @@ namespace MantenimientoVehiculos.Web.Controllers
 
             return View(model);
         }
-      
+
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -110,17 +114,23 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var vehicleMaintenanceEntity = await _context.VehicleMaintenance.FindAsync(id);
+            var vehicleMaintenanceEntity = await _context.VehicleMaintenance
+                                                    .Include(v=>v.MaintenanceType)
+                                                    .Include(v=>v.Vehicle)
+                                                    .FirstOrDefaultAsync(p => p.Id == id.Value);
+              
+
             if (vehicleMaintenanceEntity == null)
             {
                 return NotFound();
             }
+        
+            //ListMaintenanceType = _combosHelper.GetComboListMaintenance();
+            //ListVehicles = _combosHelper.GetComboVehicles();
+
             return View(vehicleMaintenanceEntity);
         }
 
-        // POST: VehicleMaintenance/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, VehicleMaintenanceViewModel model)
@@ -174,6 +184,66 @@ namespace MantenimientoVehiculos.Web.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: VehicleMaintenance/DeleteComponent/5
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteComponent(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var vehicleMaintenanceEntity = await _context.VehicleMaintenanceDetail
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (vehicleMaintenanceEntity == null)
+            {
+                return NotFound();
+            }
+            _context.Remove(vehicleMaintenanceEntity);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> AddComponent(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var maintenanceEntity = await _context.VehicleMaintenance.FindAsync(id);
+            if (maintenanceEntity == null)
+            {
+                return NotFound();
+            }
+
+            var model = new VehicleMaintenanceDetailsViewModel
+            {
+                VehicleMaintenanceId = maintenanceEntity.Id,
+                Components = _combosHelper.GetComboComponets()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddComponent(VehicleMaintenanceDetailsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //var groupEntity = await _converterHelper.ToGroupEntityAsync(model, true);
+                //_context.Add(groupEntity);
+                await _context.SaveChangesAsync();
+                //return RedirectToAction($"{nameof(Details)}/{model.TournamentId}");
+            }
+
+            return View(model);
+        }
+
+
+
 
         private bool VehicleMaintenanceEntityExists(long id)
         {

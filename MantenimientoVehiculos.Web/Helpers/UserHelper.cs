@@ -143,7 +143,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             return await _context.Users
                 .Include(u => u.UserFunction)
-                .Include(u => u.UserType)
+                //.Include(u => u.UserType)
                 .FirstOrDefaultAsync(u => u.Id == userId.ToString());
         }
     }

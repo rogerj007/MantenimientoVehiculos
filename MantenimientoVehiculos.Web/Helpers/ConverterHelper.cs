@@ -52,14 +52,6 @@ namespace MantenimientoVehiculos.Web.Helpers
             var dto = _mapper.Map<VehicleRecordActivityEntity>(model);
             dto.Vehicle = await _context.Vehicle.FindAsync(model.VehicleId);
             return dto;
-            //return new VehicleRecordActivityEntity
-            //{
-            //    Id = isNew ? 0 : model.Id,
-            //    KmHr=model.KmHr,
-            //    Vehicle= await _context.Vehicle.FindAsync(model.VehicleId)
-            //    //User= await _context.Users.FindAsync(model.User.Id),
-            //};
-
         }
 
         public VehicleRecordActivityViewModel ToVehicleRecordActivityViewModel(VehicleRecordActivityEntity model)
@@ -69,9 +61,12 @@ namespace MantenimientoVehiculos.Web.Helpers
             return dto;
         }
 
-        public Task<VehicleMaintenanceEntity> ToVehicleMaintenanceAsync(VehicleMaintenanceViewModel model)
+        public async Task<VehicleMaintenanceEntity> ToVehicleMaintenanceAsync(VehicleMaintenanceViewModel model)
         {
-            throw new NotImplementedException();
+            var dto = _mapper.Map<VehicleMaintenanceEntity>(model);
+            dto.MaintenanceType = Enum.Parse<MaintenanceType>(model.MaintenanceTypeId.ToString());
+            dto.Vehicle = await _context.Vehicle.FindAsync(model.VehicleId);
+            return dto;
         }
 
         public VehicleMaintenanceViewModel ToVehicleMaintenanceViewModel(VehicleMaintenanceEntity model)
@@ -88,7 +83,7 @@ namespace MantenimientoVehiculos.Web.Helpers
             try
             {
 
-                var user = _context.Users.SingleOrDefaultAsync(c => c.Id.Equals(model.Id.ToString())).Result;
+                var user = _context.Users.SingleOrDefaultAsync(c => c.Id.Equals(model.Id)).Result;
                 user.ModifiedDate = DateTime.UtcNow;
                 user.Address = model.Address;
                 user.Document = model.Document;
@@ -96,7 +91,6 @@ namespace MantenimientoVehiculos.Web.Helpers
                 user.LastName = model.LastName;
                 user.PhoneNumber = model.PhoneNumber;
                 user.PicturePath = model.PicturePath;
-                //if (!string.IsNullOrEmpty(path)) user.ImageUrl = path;
                 user.Enable = model.Enable;
                 user.UserType = Enum.Parse<UserType>(model.UserTypeId.ToString());
                 user.UserFunction = await _context.UserFunction.FindAsync(model.UserFuncionId);
@@ -128,7 +122,7 @@ namespace MantenimientoVehiculos.Web.Helpers
                     PhoneNumber = model.PhoneNumber,
                     PicturePath = model.PicturePath,
                     Enable = model.Enable,
-                    UserFuncionId=model.UserFunction.Id,
+                    UserFuncionId=model.UserFunction?.Id,
                     //UserTypeId=model.UserType,
                     UserTypes = _combosHelper.GetComboRoles(true),
                     UserFuncion = _combosHelper.GetComboUserFuncion()

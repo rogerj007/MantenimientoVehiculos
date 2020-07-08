@@ -33,7 +33,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public short Year { get; set; }
 
         //[Display(Name = "Vehicle Info")]
-        //public string VehicleInfoWithColor => $"{VehicleBrand.VehicleBrand} {Plaque} - {Color.Color}";
+        //public string? VehicleInfoWithColor => $"{VehicleBrand.Name} {Name} - {Color.Name}";
 
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }

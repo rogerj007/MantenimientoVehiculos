@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,16 +24,19 @@ namespace MantenimientoVehiculos.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IMapper _mapper;
 
         public VehicleController(DataContext context,
                                 ICombosHelper combosHelper,
                                 IConverterHelper converterHelper,
-                                IUserHelper userHelper)
+                                IUserHelper userHelper,
+                                IMapper mapper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _userHelper = userHelper;
+            _mapper = mapper;
         }
 
 
@@ -117,18 +121,19 @@ namespace MantenimientoVehiculos.Web.Controllers
                         path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\Vechicles", file);
                         using (var stream = new FileStream(path, FileMode.Create))
                         {
-                            await model.ImageFile.CopyToAsync(stream);
+                            await model.ImageFile.CopyToAsync(stream).ConfigureAwait(false);
                         }
                         path = $"~/images/Vechicles/{file}";
                     }
-                    var vehicle = await _converterHelper.ToVehicleAsync(model, path);
-                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
+
+                    var vehicle = await _converterHelper.ToVehicleAsync(model, path).ConfigureAwait(false);
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name).ConfigureAwait(false);
                     vehicle.Name = vehicle.Name.ToUpper();
                     vehicle.Chassis = vehicle.Chassis.ToUpper();
                     vehicle.CreatedBy = user;
                     vehicle.CreatedDate = DateTime.UtcNow;
                     _context.Add(vehicle);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync().ConfigureAwait(false);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception e)
@@ -220,12 +225,19 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                    var vehicle = await _converterHelper.ToVehicleAsync(model, path);
-                    vehicle.Name = vehicle.Name.ToUpper();
-                    vehicle.Chassis = vehicle.Chassis.ToUpper();
+                   //var vehicleMap = await _converterHelper.ToVehicleAsync(model, path);
+                    var vehicle = _context.Vehicle.SingleAsync(v => v.Id.Equals(model.Id)).Result;
+                    vehicle.VehicleBrand = await _context.VehicleBrand.FindAsync(model.VehicleBrandId);
+                    vehicle.VehicleType = await _context.VehicleType.FindAsync(model.VehicleTypeId);
+                    vehicle.VehicleStatus = await _context.VehicleStatus.FindAsync(model.VehicleStatusId);
+                    vehicle.Country = await _context.Country.FindAsync(model.CountryId);
+                    vehicle.Fuel = await _context.Fuel.FindAsync(model.FuelId);
+                    vehicle.Color = await _context.Color.FindAsync(model.ColorId);
+                    if (!string.IsNullOrEmpty(path)) vehicle.ImageUrl = path;
+                    vehicle.Name = model.Name.ToUpper();
+                    vehicle.Chassis = model.Chassis.ToUpper();
                     vehicle.ModifiedDate = DateTime.UtcNow;
                     vehicle.ModifiedBy = user;
-                    _context.Vehicle.Update(vehicle);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException ex)
