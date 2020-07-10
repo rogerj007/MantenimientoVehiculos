@@ -42,6 +42,12 @@ namespace MantenimientoVehiculos.Web.Data
                 .HasIndex(t => t.Name)
                 .IsUnique();
 
+            //builder.Entity<VehicleMaintenanceDetailEntity>()
+            //    .HasIndex(t => new { t.VehicleMaintenance, t.Component })
+            //    .IsUnique();
+
+
+
             builder.Entity<UserEntity>().HasOne(u => u.UserFunction);
 
             builder.Entity<UserFunctionEntity>().HasOne(u => u.CreatedBy);

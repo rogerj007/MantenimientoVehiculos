@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MantenimientoVehiculos.Web.Data.Entities.Base;
 using MantenimientoVehiculos.Web.Enums;
+using MantenimientoVehiculos.Web.Resources;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
@@ -12,7 +13,8 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [NotMapped]
         public override string Name { get; set; }
 
-        [Display(Name = "Maintenance Date"), DataType(DataType.Date), Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "Maintenance Date"), DataType(DataType.Date)]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime MaintenanceDate { get; set; }
 
@@ -21,8 +23,9 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public DateTime MaintenanceDatenLocal => MaintenanceDate.ToLocalTime();
 
         [Display(Name = "Km - Hours")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [Range(1, int.MaxValue, ErrorMessage = "Register activity 'Km/Hours'")]
+        //[Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName= nameof(Language.RegisterActivity))]
         public long KmHrMaintenance { get; set; }
 
         [Display(Name = "Vehicle")]

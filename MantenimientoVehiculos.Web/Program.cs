@@ -27,7 +27,7 @@ namespace MantenimientoVehiculos.Web
             IServiceScopeFactory scopeFactory = host.Services.GetService<IServiceScopeFactory>();
             using (IServiceScope scope = scopeFactory.CreateScope())
             {
-                SeedDb seeder = scope.ServiceProvider.GetService<SeedDb>();
+                var seeder = scope.ServiceProvider.GetService<SeedDb>();
                 seeder.SeedAsync().Wait();
             }
         }

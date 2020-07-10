@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using MantenimientoVehiculos.Web.Resources;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Localization;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ColorController : Controller
     {
+        private readonly IStringLocalizer<ColorController> _localizer;
         private readonly DataContext _context;
 
         public ColorController(DataContext context)
@@ -24,6 +30,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         // GET: Color
         public async Task<IActionResult> Index()
         {
+            var cultureInfo = Thread.CurrentThread.CurrentCulture;
+            //Language.Culture = cultureInfo;
             return View(await _context.Color.ToListAsync());
         }
 

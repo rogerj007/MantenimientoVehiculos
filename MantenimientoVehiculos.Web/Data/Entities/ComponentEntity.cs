@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using MantenimientoVehiculos.Web.Data.Entities.Base;
+using MantenimientoVehiculos.Web.Resources;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
@@ -12,11 +9,15 @@ namespace MantenimientoVehiculos.Web.Data.Entities
 
 
         [Display(Name = "Component")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        [StringLength(25, MinimumLength = 4, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [MaxLength(100)]
         public override string Name { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        [StringLength(25, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
+       
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        [StringLength(25, MinimumLength = 4, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [MaxLength(25)]
         public string Code { get; set; }
 
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MantenimientoVehiculos.Web.Enums;
+using MantenimientoVehiculos.Web.Resources;
 using Microsoft.AspNetCore.Identity;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
@@ -10,23 +11,27 @@ namespace MantenimientoVehiculos.Web.Data.Entities
     public class UserEntity :IdentityUser
     {
         [Display(Name = "Document")]
-        [MaxLength(20, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [StringLength(20, MinimumLength = 2, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [MaxLength(20)]
         public string Document { get; set; }
 
 
         
         [Display(Name = "First Name")]
-        [MaxLength(50, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        [MaxLength(50)]
         public string FirstName { get; set; }
 
         [Display(Name = "Last Name")]
-        [MaxLength(50, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        [MaxLength(50)]
         public string LastName { get; set; }
 
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [StringLength(100, MinimumLength = 2, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        [MaxLength(100)]
         public string Address { get; set; }
 
         [Display(Name = "Picture")]
@@ -36,6 +41,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities
 
         public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
         [Display(Name = "User Type")]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = "Required_Message")]
         public UserType UserType { get; set; }
         public bool Enable { get; set; }
         

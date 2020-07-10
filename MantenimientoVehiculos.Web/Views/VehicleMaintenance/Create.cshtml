@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var today = DateTime.Today.Date;
+    var maxDate = DateTime.Today.Date.AddDays(1);
    
 }
 
@@ -20,12 +20,12 @@
                 <select asp-for="VehicleId" asp-items="Model.ListVehicles" class="form-control"></select>
                 <span asp-validation-for="VehicleId" class="text-danger"></span>
             </div>
+            <partial name="_VechileMaintenance" />
             <div class="form-group">
                 <label asp-for="MaintenanceDate" class="control-label"></label>
-                <input id="MaintenanceDate" asp-for="MaintenanceDate" type="date" asp-format="{0:dd/MM/yyyy}" value="@today" class="form-control" />
+                <input id="MaintenanceDate" asp-for="MaintenanceDate" type="date" asp-format="{0:dd/MM/yyyy}" max="@maxDate" class="form-control" />
                 <span asp-validation-for="MaintenanceDate" class="text-danger"></span>
             </div>
-            <partial name="_VechileMaintenance" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-success">Back to List</a>
@@ -38,7 +38,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
-@*<script type="text/javascript">
+    @*<script type="text/javascript">
     $('.datepicker').datepicker({
         format: 'dd/MM/yyyy',
         startDate: '-3d'

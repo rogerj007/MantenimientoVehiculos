@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MantenimientoVehiculos.Web.Data.Entities.Base;
+using MantenimientoVehiculos.Web.Resources;
 
 namespace MantenimientoVehiculos.Web.Data.Entities
 {
@@ -12,23 +13,24 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [RegularExpression(@"^([A-Za-z]{3}\d{4})$", ErrorMessage = "The field {0} must starts with three characters and ends with numbers.")]
         [Column("Plaque")]
         [Display(Name = "Plaque")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         public override string Name { get; set; }
 
-        [StringLength(25, MinimumLength = 4, ErrorMessage = "The {0} field must have {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [StringLength(25, MinimumLength = 4, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [MaxLength(25)]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         public string MotorSerial  { get; set; }
 
-        [StringLength(25, MinimumLength = 6, ErrorMessage = "The {0} field must have {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [StringLength(25, MinimumLength = 4, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         public string Chassis { get; set; }
 
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         [Range(1000, int.MaxValue, ErrorMessage = "Year must be from 1000")]
         public int Cylinder { get; set; }
         
         [Display(Name = "Release Date")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         [Range(1980, int.MaxValue, ErrorMessage = "Year must be from 2000")]
         public short Year { get; set; }
 
