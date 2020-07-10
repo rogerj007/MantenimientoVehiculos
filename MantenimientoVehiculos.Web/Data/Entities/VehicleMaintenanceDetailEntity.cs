@@ -9,5 +9,6 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public override string Name { get; set; }
         public ComponentEntity Component { get; set; }
 
-    }
+        public VehicleMaintenanceEntity VehicleMaintenance { get; set; }
+}
 }

@@ -20,6 +20,9 @@ namespace MantenimientoVehiculos.Web.Helpers
         VehicleMaintenanceViewModel ToVehicleMaintenanceViewModel(VehicleMaintenanceEntity model);
 
 
+        Task<VehicleMaintenanceDetailEntity> ToVehicleMaintenanceDetailsAsync(VehicleMaintenanceDetailsViewModel model, bool isNew);
+        VehicleMaintenanceDetailsViewModel ToVehicleMaintenanceDetailsViewModel(VehicleMaintenanceDetailEntity model);
+
         Task<UserEntity> ToUserAsync(EditListUserViewModel model,string path);
 
         EditListUserViewModel ToEditListUserViewModel(UserEntity model);

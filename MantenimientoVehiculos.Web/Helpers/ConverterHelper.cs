@@ -72,8 +72,30 @@ namespace MantenimientoVehiculos.Web.Helpers
         public VehicleMaintenanceViewModel ToVehicleMaintenanceViewModel(VehicleMaintenanceEntity model)
         {
             var dto = _mapper.Map<VehicleMaintenanceViewModel>(model);
+            dto.MaintenanceTypeId = (int) model.MaintenanceType;
+            dto.VehicleId =model.Vehicle.Id;
             dto.ListMaintenanceType = _combosHelper.GetComboListMaintenance();
             dto.ListVehicles = _combosHelper.GetComboVehicles();
+            return dto;
+        }
+
+
+        public async Task<VehicleMaintenanceDetailEntity> ToVehicleMaintenanceDetailsAsync(VehicleMaintenanceDetailsViewModel model, bool isNew)
+        {
+            var dto = _mapper.Map<VehicleMaintenanceDetailEntity>(model);
+            dto.Id = isNew ? 0 : model.Id;
+            dto.VehicleMaintenance = await _context.VehicleMaintenance.FindAsync(model.VehicleMaintenanceId);
+            dto.Component = await _context.Component.FindAsync(model.ComponentId);
+            return dto;
+        }
+
+        public VehicleMaintenanceDetailsViewModel ToVehicleMaintenanceDetailsViewModel(VehicleMaintenanceDetailEntity model)
+        {
+            var dto = _mapper.Map<VehicleMaintenanceDetailsViewModel>(model);
+            //dto.MaintenanceTypeId = (int)model.MaintenanceType;
+            //dto.VehicleMaintenanceId = model.ma
+            dto.Components = _combosHelper.GetComboComponets();
+         
             return dto;
         }
 

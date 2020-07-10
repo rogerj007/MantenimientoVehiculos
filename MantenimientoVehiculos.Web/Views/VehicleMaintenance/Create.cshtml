@@ -22,27 +22,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="MaintenanceDate" class="control-label"></label>
-                
-                <input id="MaintenanceDate" asp-for="MaintenanceDate"  type="date" asp-format="{0:dd/MM/yyyy}" value="@today" class="form-control" />
+                <input id="MaintenanceDate" asp-for="MaintenanceDate" type="date" asp-format="{0:dd/MM/yyyy}" value="@today" class="form-control" />
                 <span asp-validation-for="MaintenanceDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="KmHrMaintenance" class="control-label"></label>
-                <input asp-for="KmHrMaintenance" class="form-control" />
-                <span asp-validation-for="KmHrMaintenance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaintenanceTypeId" class="control-label"></label>
-                <select asp-for="MaintenanceTypeId" asp-items="Model.ListMaintenanceType" class="form-control"></select>
-                <span asp-validation-for="MaintenanceTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="Complete" /> @Html.DisplayNameFor(model => model.Complete)
-                    </label>
-                </div>
-            </div>
+            <partial name="_VechileMaintenance" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-success">Back to List</a>

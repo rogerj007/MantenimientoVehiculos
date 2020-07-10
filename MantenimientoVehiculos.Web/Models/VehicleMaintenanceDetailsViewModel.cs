@@ -14,8 +14,8 @@ namespace MantenimientoVehiculos.Web.Models
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Vehicle Type")]
-        [Range(1, byte.MaxValue, ErrorMessage = "You must select a Vehicle Type.")]
-        public byte ComponentId { get; set; }
+        [Range(1, short.MaxValue, ErrorMessage = "You must select a Vehicle Type.")]
+        public short ComponentId { get; set; }
 
         public IEnumerable<SelectListItem> Components { get; set; }
     }

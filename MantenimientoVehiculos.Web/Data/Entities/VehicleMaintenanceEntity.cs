@@ -12,14 +12,12 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [NotMapped]
         public override string Name { get; set; }
 
-        [Display(Name = "Maintenance Date")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [Display(Name = "Maintenance Date"), DataType(DataType.Date), Required(ErrorMessage = "The field {0} is mandatory.")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime MaintenanceDate { get; set; }
 
-        [Display(Name = "Maintenance Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
-        [DataType(DataType.Date)]
+        [Display(Name = "Maintenance Date"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+    
         public DateTime MaintenanceDatenLocal => MaintenanceDate.ToLocalTime();
 
         [Display(Name = "Km - Hours")]

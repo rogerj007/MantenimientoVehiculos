@@ -15,6 +15,8 @@ namespace MantenimientoVehiculos.Web.Helpers
 
             CreateMap<VehicleMaintenanceEntity, VehicleMaintenanceViewModel>().ReverseMap();
 
+            CreateMap<VehicleMaintenanceDetailEntity, VehicleMaintenanceDetailsViewModel>().ReverseMap();
+
             CreateMap<UserEntity, EditUserViewModel>().ReverseMap();
 
         }

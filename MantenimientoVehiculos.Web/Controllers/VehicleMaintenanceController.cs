@@ -41,12 +41,12 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (isAdmin)
                 mantence = await _context.VehicleMaintenance
                                         .Include(v => v.Vehicle)
-                                        .Include(v => v.VehicleMaintenanceDetail)
+                                        //.Include(v => v.VehicleMaintenanceDetail)
                                         .ToListAsync();
             else
                 mantence = await _context.VehicleMaintenance
                                         .Include(v => v.Vehicle)
-                                        .Include(v => v.VehicleMaintenanceDetail)
+                                        //.Include(v => v.VehicleMaintenanceDetail)
                                         .Where(u => u.CreatedBy == user)
                                         .ToListAsync();
 
@@ -115,7 +115,7 @@ namespace MantenimientoVehiculos.Web.Controllers
             }
 
             var vehicleMaintenanceEntity = await _context.VehicleMaintenance
-                                                    .Include(v=>v.MaintenanceType)
+                                                    .Include(md=>md.VehicleMaintenanceDetail)
                                                     .Include(v=>v.Vehicle)
                                                     .FirstOrDefaultAsync(p => p.Id == id.Value);
               
@@ -124,11 +124,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 return NotFound();
             }
-        
-            //ListMaintenanceType = _combosHelper.GetComboListMaintenance();
-            //ListVehicles = _combosHelper.GetComboVehicles();
 
-            return View(vehicleMaintenanceEntity);
+            var model=_converterHelper.ToVehicleMaintenanceViewModel(vehicleMaintenanceEntity);
+            return View(model);
         }
 
         [HttpPost]
@@ -144,10 +142,18 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var vehicleMantence = await _converterHelper.ToVehicleMaintenanceAsync(model);
+                    var vehicleMantence = _context.VehicleMaintenance
+                                                                        .FirstOrDefaultAsync(m => id.Equals(model.Id)).Result;
+
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                    vehicleMantence.MaintenanceType = Enum.Parse<MaintenanceType>(model.MaintenanceTypeId.ToString());
+                    vehicleMantence.Vehicle = await _context.Vehicle.FindAsync(model.VehicleId);
+                    vehicleMantence.KmHrMaintenance = model.KmHrMaintenance;
+
                     vehicleMantence.ModifiedDate = DateTime.UtcNow;
+                    vehicleMantence.Complete = model.Complete;
                     vehicleMantence.ModifiedBy = user;
+
                     _context.Update(vehicleMantence);
                     await _context.SaveChangesAsync();
                 }
@@ -186,7 +192,7 @@ namespace MantenimientoVehiculos.Web.Controllers
         }
 
         // GET: VehicleMaintenance/DeleteComponent/5
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComponent(long? id)
         {
             if (id == null)
@@ -194,15 +200,16 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            var vehicleMaintenanceEntity = await _context.VehicleMaintenanceDetail
+            var vehicleMaintenanceDetails = await _context.VehicleMaintenanceDetail
+                .Include(m=>m.VehicleMaintenance)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicleMaintenanceEntity == null)
+            if (vehicleMaintenanceDetails == null)
             {
                 return NotFound();
             }
-            _context.Remove(vehicleMaintenanceEntity);
+            _context.Remove(vehicleMaintenanceDetails);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction($"{nameof(Details)}/{vehicleMaintenanceDetails.VehicleMaintenance.Id}");
         }
 
         public async Task<IActionResult> AddComponent(long? id)
@@ -233,17 +240,18 @@ namespace MantenimientoVehiculos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                //var groupEntity = await _converterHelper.ToGroupEntityAsync(model, true);
-                //_context.Add(groupEntity);
+                var md = await _converterHelper.ToVehicleMaintenanceDetailsAsync(model,true);
+                var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                md.CreatedBy = user;
+                md.CreatedDate = DateTime.UtcNow;
+                _context.Add(md);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction($"{nameof(Details)}/{model.TournamentId}");
+                return RedirectToAction($"{nameof(Details)}/{model.VehicleMaintenanceId}");
             }
 
+            model.Components = _combosHelper.GetComboComponets();
             return View(model);
         }
-
-
-
 
         private bool VehicleMaintenanceEntityExists(long id)
         {
