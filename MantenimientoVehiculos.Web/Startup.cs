@@ -74,24 +74,24 @@ namespace MantenimientoVehiculos.Web
             services.AddScoped<IMailHelper, MailHelper>();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
-            //services.Configure<RequestLocalizationOptions>(
-            //    opts =>
-            //    {
-            //        var supportedCultures = new[]
-            //        {
-            //            new CultureInfo("en-US"),
-            //            new CultureInfo("es")
-                       
-            //        };
+            services.Configure<RequestLocalizationOptions>(
+                opts =>
+                {
+                    var supportedCultures = new[]
+                    {
+                        new CultureInfo("en-US"),
+                        new CultureInfo("es")
 
-            //        opts.DefaultRequestCulture = new RequestCulture("en-US");
-            //        // Formatting numbers, dates, etc.
-            //        opts.SupportedCultures = supportedCultures;
-            //        // UI strings that we have localized.
-            //        opts.SupportedUICultures = supportedCultures;
-            //    });
+                    };
+
+                    opts.DefaultRequestCulture = new RequestCulture("es");
+                    // Formatting numbers, dates, etc.
+                    opts.SupportedCultures = supportedCultures;
+                    // UI strings that we have localized.
+                    opts.SupportedUICultures = supportedCultures;
+                });
             services.AddMvc()
-                .AddViewLocalization()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
          
@@ -114,7 +114,7 @@ namespace MantenimientoVehiculos.Web
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
-
+            
             app.UseMvc(routes =>
             {
 

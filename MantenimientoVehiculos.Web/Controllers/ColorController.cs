@@ -117,37 +117,34 @@ namespace MantenimientoVehiculos.Web.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(colorEntity);
+            try
             {
+                var color =await _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
+                color.Name= colorEntity.Name.ToUpper();
+                color.ModifiedDate = DateTime.UtcNow;
                 try
                 {
-                    var color =await _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                    color.Name= colorEntity.Name.ToUpper();
-                    color.ModifiedDate = DateTime.UtcNow;
-                    try
-                    {
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
-                    }
-                    catch (Exception e)
-                    {
-                        if (e.InnerException != null)
-                            ModelState.AddModelError(string.Empty,
-                                e.InnerException != null && e.InnerException.Message.Contains("duplicate")
-                                    ? "Already exists row"
-                                    : e.InnerException.Message);
-                    }
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception e)
                 {
-                    if (!ColorEntityExists(colorEntity.Id))
-                    {
-                        return NotFound();
-                    }
-
-                    throw;
+                    if (e.InnerException != null)
+                        ModelState.AddModelError(string.Empty,
+                            e.InnerException != null && e.InnerException.Message.Contains("duplicate")
+                                ? "Already exists row"
+                                : e.InnerException.Message);
                 }
-               
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ColorEntityExists(colorEntity.Id))
+                {
+                    return NotFound();
+                }
+
+                throw;
             }
             return View(colorEntity);
         }

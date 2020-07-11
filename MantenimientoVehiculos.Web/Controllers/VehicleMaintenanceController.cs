@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -252,6 +253,46 @@ namespace MantenimientoVehiculos.Web.Controllers
             model.Components = _combosHelper.GetComboComponets();
             return View(model);
         }
+
+
+
+
+        public IActionResult Report()
+        {
+            //var model = new ReportViewModel
+            //{
+            //    MaintenanceDateBegin = DateTime.Now,
+            //    MaintenanceDateEnd = DateTime.Now.AddDays(1)
+            //};
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Report(string maintenanceDateBegin, string maintenanceDateEnd)
+        {
+
+            var begin = DateTime.Parse(maintenanceDateBegin);
+            var end = DateTime.Parse(maintenanceDateEnd);
+            var query = await _context.VehicleMaintenance
+                                                        .Include(v => v.VehicleMaintenanceDetail)
+                                                        .ThenInclude(c=>c.Component)
+                                                        .Include(v => v.Vehicle)
+                                                        .Where(d => d.MaintenanceDate.Date >= begin && d.MaintenanceDate.Date <= end && d.Complete)
+                                                        .Select(q =>
+                                                                    new ReportViewModel
+                                                                    {
+                                                                        Plaque = q.Vehicle.Name,
+                                                                        Date = q.MaintenanceDate.ToLocalTime(),
+                                                                        KmHrMaintenance=q.KmHrMaintenance
+                                                                        //ComponentName=q.VehicleMaintenanceDetail
+                                                                    })
+                                                        .ToListAsync();
+
+
+
+            return View(query);
+        }
+
 
         private bool VehicleMaintenanceEntityExists(long id)
         {
