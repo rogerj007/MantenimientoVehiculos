@@ -12,13 +12,13 @@ namespace MantenimientoVehiculos.Web.Models
     {
         public string Plaque { get; set; }
 
-        [DisplayName("Component Name")]
+        [Display(Name = "Component", ResourceType = typeof(Language))]
         public string ComponentName { get; set; }
 
         [DisplayName("Km  Hr")]
         public long KmHrMaintenance { get; set; }
         
-        [DisplayName("Data Maintece")]
+        [DisplayName("Date Maintenance")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
      

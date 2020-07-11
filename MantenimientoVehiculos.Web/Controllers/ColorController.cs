@@ -30,8 +30,6 @@ namespace MantenimientoVehiculos.Web.Controllers
         // GET: Color
         public async Task<IActionResult> Index()
         {
-            var cultureInfo = Thread.CurrentThread.CurrentCulture;
-            //Language.Culture = cultureInfo;
             return View(await _context.Color.ToListAsync());
         }
 

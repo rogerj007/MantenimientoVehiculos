@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,8 @@ namespace MantenimientoVehiculos.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
+        
+
 
         public VehicleMaintenanceController(DataContext context,
                                             ICombosHelper combosHelper,
@@ -259,12 +263,6 @@ namespace MantenimientoVehiculos.Web.Controllers
 
         public IActionResult Report()
         {
-            //var model = new ReportViewModel
-            //{
-            //    MaintenanceDateBegin = DateTime.Now,
-            //    MaintenanceDateEnd = DateTime.Now.AddDays(1)
-            //};
-
             return View();
         }
         [HttpPost]
@@ -274,25 +272,70 @@ namespace MantenimientoVehiculos.Web.Controllers
             var begin = DateTime.Parse(maintenanceDateBegin);
             var end = DateTime.Parse(maintenanceDateEnd);
             var query = await _context.VehicleMaintenance
+                                                        .Include(v => v.Vehicle)
                                                         .Include(v => v.VehicleMaintenanceDetail)
                                                         .ThenInclude(c=>c.Component)
-                                                        .Include(v => v.Vehicle)
                                                         .Where(d => d.MaintenanceDate.Date >= begin && d.MaintenanceDate.Date <= end && d.Complete)
-                                                        .Select(q =>
-                                                                    new ReportViewModel
-                                                                    {
-                                                                        Plaque = q.Vehicle.Name,
-                                                                        Date = q.MaintenanceDate.ToLocalTime(),
-                                                                        KmHrMaintenance=q.KmHrMaintenance
-                                                                        //ComponentName=q.VehicleMaintenanceDetail
-                                                                    })
                                                         .ToListAsync();
 
+            var model = (from v in query from vm in v.VehicleMaintenanceDetail select new ReportViewModel {Plaque = v.Vehicle.Name, Date = v.MaintenanceDate.Date, KmHrMaintenance = v.KmHrMaintenance, ComponentName = vm.Component.Name}).ToList();
 
-
-            return View(query);
+            
+            return View(model);
         }
 
+        [HttpPost]
+        public async Task<FileContentResult> DownloadExcelDocument(string maintenanceDateBegin, string maintenanceDateEnd)
+        {
+            if (string.IsNullOrEmpty(maintenanceDateBegin) || string.IsNullOrEmpty(maintenanceDateEnd)) return null;
+            var begin = DateTime.Parse(maintenanceDateBegin);
+            var end = DateTime.Parse(maintenanceDateEnd);
+            var query = await _context.VehicleMaintenance
+                .Include(v => v.Vehicle)
+                .Include(v => v.VehicleMaintenanceDetail)
+                .ThenInclude(c => c.Component)
+                .Where(d => d.MaintenanceDate.Date >= begin && d.MaintenanceDate.Date <= end && d.Complete)
+                .ToListAsync();
+
+            var model = (from v in query from vm in v.VehicleMaintenanceDetail select new ReportViewModel { Plaque = v.Vehicle.Name, Date = v.MaintenanceDate.Date, KmHrMaintenance = v.KmHrMaintenance, ComponentName = vm.Component.Name }).ToList();
+            
+            
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Report");
+            var currentRow = 1;
+            worksheet.Cell(currentRow, 1).Style.Fill.BackgroundColor = XLColor.BabyBlue;
+            worksheet.Cell(currentRow, 1).Style.Font.FontColor = XLColor.Red;
+            worksheet.Cell(currentRow, 1).Style.Font.Bold = true;
+            worksheet.Cell(currentRow, 1).Value = "Plaque";
+            worksheet.Cell(currentRow, 2).Style.Fill.BackgroundColor = XLColor.BabyBlue;
+            worksheet.Cell(currentRow, 2).Style.Font.Bold = true;
+            worksheet.Cell(currentRow, 2).Value = "Date";
+            worksheet.Cell(currentRow, 3).Style.Fill.BackgroundColor = XLColor.BabyBlue;
+            worksheet.Cell(currentRow, 3).Style.Font.Bold = true;
+            worksheet.Cell(currentRow, 3).Value = "Km / Hr";
+            worksheet.Cell(currentRow, 4).Style.Fill.BackgroundColor = XLColor.BabyBlue;
+            worksheet.Cell(currentRow, 4).Style.Font.Bold = true;
+            worksheet.Cell(currentRow, 4).Value = "Component Name";
+            worksheet.Cell(currentRow, 4).Worksheet.ColumnWidth = 50;
+
+            foreach (var user in model)
+            {
+                currentRow++;
+                worksheet.Cell(currentRow, 1).Value = user.Plaque;
+                worksheet.Cell(currentRow, 2).Value = user.Date;
+                worksheet.Cell(currentRow, 3).Value = user.KmHrMaintenance;
+                worksheet.Cell(currentRow, 4).Value = user.ComponentName;
+            }
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            var content = stream.ToArray();
+
+            return File(
+                content,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "Report.xlsx");
+        }
 
         private bool VehicleMaintenanceEntityExists(long id)
         {

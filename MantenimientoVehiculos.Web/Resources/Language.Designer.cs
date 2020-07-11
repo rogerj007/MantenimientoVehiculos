@@ -61,6 +61,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Component.
+        /// </summary>
+        public static string Component {
+            get {
+                return ResourceManager.GetString("Component", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Component doesn&apos;t exists..
         /// </summary>
         public static string ComponetDoesntExists {
@@ -115,11 +124,29 @@ namespace MantenimientoVehiculos.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fuel.
+        /// </summary>
+        public static string Fuel {
+            get {
+                return ResourceManager.GetString("Fuel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect current password..
         /// </summary>
         public static string IncorrectCurrentPassword {
             get {
                 return ResourceManager.GetString("IncorrectCurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maintenance Type.
+        /// </summary>
+        public static string MaintenanceType {
+            get {
+                return ResourceManager.GetString("MaintenanceType", resourceCulture);
             }
         }
         
@@ -237,6 +264,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         public static string UserModified {
             get {
                 return ResourceManager.GetString("UserModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vehicle.
+        /// </summary>
+        public static string Vehicle {
+            get {
+                return ResourceManager.GetString("Vehicle", resourceCulture);
             }
         }
     }

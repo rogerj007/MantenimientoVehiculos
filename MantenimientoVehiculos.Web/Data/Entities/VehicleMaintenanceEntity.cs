@@ -20,7 +20,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities
 
         [Display(Name = "Maintenance Date"), DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
     
-        public DateTime MaintenanceDatenLocal => MaintenanceDate.ToLocalTime();
+        public DateTime MaintenanceDateLocal => MaintenanceDate.ToLocalTime();
 
         [Display(Name = "Km - Hours")]
         //[Required(ErrorMessage = "The field {0} is mandatory.")]
@@ -28,10 +28,10 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName= nameof(Language.RegisterActivity))]
         public long KmHrMaintenance { get; set; }
 
-        [Display(Name = "Vehicle")]
+        [Display(Name = "Vehicle", ResourceType = typeof(Language))]
         public VehicleEntity Vehicle { get; set; }
 
-        [Display(Name = "Maintenance Type")]
+        [Display(Name = "MaintenanceType",  ResourceType = typeof(Language))]
         public MaintenanceType MaintenanceType { get; set; }
 
         public bool Complete { get; set; }

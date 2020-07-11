@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Component" xml:space="preserve">
+    <value>Componente</value>
+  </data>
   <data name="ComponetDoesntExists" xml:space="preserve">
     <value>El componente no existe.</value>
   </data>
@@ -135,8 +138,14 @@
   <data name="CreationDate" xml:space="preserve">
     <value>Fecha de creación.</value>
   </data>
+  <data name="Fuel" xml:space="preserve">
+    <value>Conbustible</value>
+  </data>
   <data name="IncorrectCurrentPassword" xml:space="preserve">
     <value>Contraseña actual incorrecta</value>
+  </data>
+  <data name="MaintenanceType" xml:space="preserve">
+    <value>Tipo de Mantenimiento</value>
   </data>
   <data name="MaxLength_Message" xml:space="preserve">
     <value>El campo {0} no puede tener más de {1} caracteres.</value>
@@ -176,5 +185,8 @@
   </data>
   <data name="UserModified" xml:space="preserve">
     <value>Modificado por</value>
+  </data>
+  <data name="Vehicle" xml:space="preserve">
+    <value>Vehiculo</value>
   </data>
 </root>
