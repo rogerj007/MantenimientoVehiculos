@@ -57,7 +57,7 @@ namespace MantenimientoVehiculos.Web.Data
 
         private async Task CheckUsersAsync()
         {
-           await CheckUserAsync("1010", "Admin", "Web", "admin@mercapro.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Admin);
+           await CheckUserAsync("1010", "Admin", "Web", "staric.richar@gmail.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Admin);
            //await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true,2, UserType.Supervisor);
            //await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,3,UserType.User);
         }

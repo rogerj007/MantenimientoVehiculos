@@ -148,7 +148,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var vehicleMantence = _context.VehicleMaintenance
-                                                                        .FirstOrDefaultAsync(m => id.Equals(model.Id)).Result;
+                                                                        .FirstOrDefaultAsync(m => m.Id.Equals(model.Id)).Result;
 
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
                     vehicleMantence.MaintenanceType = Enum.Parse<MaintenanceType>(model.MaintenanceTypeId.ToString());

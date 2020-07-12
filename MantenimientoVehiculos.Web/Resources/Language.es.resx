@@ -139,7 +139,7 @@
     <value>Fecha de creación.</value>
   </data>
   <data name="Fuel" xml:space="preserve">
-    <value>Conbustible</value>
+    <value>Combustible</value>
   </data>
   <data name="IncorrectCurrentPassword" xml:space="preserve">
     <value>Contraseña actual incorrecta</value>
