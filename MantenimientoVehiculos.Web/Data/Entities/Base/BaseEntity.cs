@@ -39,7 +39,7 @@ namespace MantenimientoVehiculos.Web.Data.Entities.Base
 
         [Display(ResourceType = typeof(Language), Name = nameof(Language.UserModified))]
         public UserEntity ModifiedBy { get; set; }
-
+        //[ConcurrencyCheck]
         [Timestamp]
         public byte[] Version { get; set; }
 

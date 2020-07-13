@@ -60,7 +60,7 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
 
             var user = _userManager.FindByEmailAsync(model.Username).Result;
-            if (user.Enable)
+            if (user!=null && user.Enable)
             {
                 return await _signInManager.PasswordSignInAsync(
                     model.Username,

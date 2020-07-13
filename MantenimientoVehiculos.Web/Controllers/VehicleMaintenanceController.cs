@@ -147,19 +147,13 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var vehicleMantence = _context.VehicleMaintenance
-                                                                        .FirstOrDefaultAsync(m => m.Id.Equals(model.Id)).Result;
-
+                    var vehicleMantence = await _converterHelper.ToVehicleMaintenanceAsync(model);
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                    vehicleMantence.MaintenanceType = Enum.Parse<MaintenanceType>(model.MaintenanceTypeId.ToString());
-                    vehicleMantence.Vehicle = await _context.Vehicle.FindAsync(model.VehicleId);
-                    vehicleMantence.KmHrMaintenance = model.KmHrMaintenance;
-
                     vehicleMantence.ModifiedDate = DateTime.UtcNow;
                     vehicleMantence.Complete = model.Complete;
                     vehicleMantence.ModifiedBy = user;
-
-                    _context.Update(vehicleMantence);
+                    _context.Entry(vehicleMantence).State = EntityState.Modified;
+                    //_context.Update(vehicleMantence);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

@@ -118,13 +118,13 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var jobTitle = _context.UserFunction.FirstOrDefaultAsync(j => j.Id.Equals(id)).Result;
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                    jobTitle.ModifiedBy = user;
-                    jobTitle.Name = jobTitleEntity.Name.ToUpper();
-                    jobTitle.ModifiedDate = DateTime.UtcNow;
+                    jobTitleEntity.ModifiedBy = user;
+                    jobTitleEntity.Name = jobTitleEntity.Name.ToUpper();
+                    jobTitleEntity.ModifiedDate = DateTime.UtcNow;
                     try
                     {
+                        _context.Entry(jobTitleEntity).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
                     }

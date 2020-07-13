@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using MantenimientoVehiculos.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MantenimientoVehiculos.Web.Controllers
@@ -15,10 +16,12 @@ namespace MantenimientoVehiculos.Web.Controllers
     public class FuelController : Controller
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public FuelController(DataContext context)
+        public FuelController(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         // GET: Fuel
@@ -113,11 +116,13 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var fuel = _context.Fuel.FirstOrDefaultAsync(f => f.Id.Equals(id));
-                    fuel.Result.Name = fuelEntity.Name.ToUpper();
-                    fuel.Result.ModifiedDate = DateTime.UtcNow;
+                    var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                    fuelEntity.Name = fuelEntity.Name.ToUpper();
+                    fuelEntity.ModifiedDate = DateTime.UtcNow;
+                    fuelEntity.ModifiedBy = user;
                     try
                     {
+                        _context.Entry(fuelEntity).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
                     }

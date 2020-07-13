@@ -118,11 +118,11 @@ namespace MantenimientoVehiculos.Web.Controllers
             if (!ModelState.IsValid) return View(colorEntity);
             try
             {
-                var color =await _context.Color.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                color.Name= colorEntity.Name.ToUpper();
-                color.ModifiedDate = DateTime.UtcNow;
+                colorEntity.Name= colorEntity.Name.ToUpper();
+                colorEntity.ModifiedDate = DateTime.UtcNow;
                 try
                 {
+                    _context.Entry(colorEntity).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }

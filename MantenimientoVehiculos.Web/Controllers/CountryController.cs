@@ -113,13 +113,14 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
-                    var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id)).Result;
+                   // var country = _context.Country.SingleOrDefaultAsync(c => c.Id.Equals(id)).Result;
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                    country.ModifiedBy = user;
-                    country.Name = countryEntity.Name.ToUpper();
-                    country.ModifiedDate = DateTime.UtcNow;
+                    countryEntity.ModifiedBy = user;
+                    countryEntity.Name = countryEntity.Name.ToUpper();
+                    countryEntity.ModifiedDate = DateTime.UtcNow;
                     try
                     {
+                        _context.Entry(countryEntity).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
                     }

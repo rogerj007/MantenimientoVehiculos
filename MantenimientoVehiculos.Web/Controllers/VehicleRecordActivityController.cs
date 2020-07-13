@@ -140,12 +140,9 @@ namespace MantenimientoVehiculos.Web.Controllers
             try
             {
                 var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                var vehicleRecord = await _context.VehicleRecordActivities.SingleOrDefaultAsync(c => c.Id.Equals(id));
-                vehicleRecord.KmHr = model.KmHr;
-                vehicleRecord.ModifiedBy = user;
-                vehicleRecord.ModifiedDate = DateTime.UtcNow;
-                //_context.Update(vehicleRecord);
-
+                model.ModifiedBy = user;
+                model.ModifiedDate = DateTime.UtcNow;
+                _context.Entry(model).State = EntityState.Modified;
                 await _context.SaveChangesAsync().ConfigureAwait(true);
             }
             catch (DbUpdateConcurrencyException ex)

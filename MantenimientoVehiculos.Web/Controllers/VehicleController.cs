@@ -225,19 +225,13 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                   //var vehicleMap = await _converterHelper.ToVehicleAsync(model, path);
-                    var vehicle = _context.Vehicle.SingleAsync(v => v.Id.Equals(model.Id)).Result;
-                    vehicle.VehicleBrand = await _context.VehicleBrand.FindAsync(model.VehicleBrandId);
-                    vehicle.VehicleType = await _context.VehicleType.FindAsync(model.VehicleTypeId);
-                    vehicle.VehicleStatus = await _context.VehicleStatus.FindAsync(model.VehicleStatusId);
-                    vehicle.Country = await _context.Country.FindAsync(model.CountryId);
-                    vehicle.Fuel = await _context.Fuel.FindAsync(model.FuelId);
-                    vehicle.Color = await _context.Color.FindAsync(model.ColorId);
-                    if (!string.IsNullOrEmpty(path)) vehicle.ImageUrl = path;
+                    var vehicle = await _converterHelper.ToVehicleAsync(model, path);
                     vehicle.Name = model.Name.ToUpper();
                     vehicle.Chassis = model.Chassis.ToUpper();
                     vehicle.ModifiedDate = DateTime.UtcNow;
                     vehicle.ModifiedBy = user;
+                   
+                    _context.Entry(vehicle).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException ex)

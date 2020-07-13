@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using MantenimientoVehiculos.Web.Data.Entities;
 using MantenimientoVehiculos.Web.Models;
 
@@ -9,7 +10,10 @@ namespace MantenimientoVehiculos.Web.Helpers
         public AutoMapperConfig()
         {
 
-            CreateMap<VehicleEntity, VehicleViewModel>().ReverseMap();
+            CreateMap<VehicleEntity, VehicleViewModel>()
+                //.ForMember(dest => dest.Version,
+                //    opt => opt.MapFrom(src => Convert.FromBase64String(src.Version)))
+                .ReverseMap();
 
             CreateMap<VehicleRecordActivityEntity, VehicleRecordActivityViewModel>().ReverseMap();
 
