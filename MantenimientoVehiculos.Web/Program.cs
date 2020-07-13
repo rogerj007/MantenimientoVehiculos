@@ -24,7 +24,7 @@ namespace MantenimientoVehiculos.Web
         }
         private static void RunSeeding(IWebHost host)
         {
-            IServiceScopeFactory scopeFactory = host.Services.GetService<IServiceScopeFactory>();
+            var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
             using (IServiceScope scope = scopeFactory.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<SeedDb>();
