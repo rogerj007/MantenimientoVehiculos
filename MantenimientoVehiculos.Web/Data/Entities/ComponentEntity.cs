@@ -21,6 +21,10 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [MaxLength(25)]
         public string Code { get; set; }
 
+        [Display(Name = "TTL", ResourceType = typeof(Language))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        public short Ttl { get; set; }
+
         public ICollection<VehicleMaintenanceDetailEntity> VehicleMaintenanceDetail { get; set; }
     }
 }

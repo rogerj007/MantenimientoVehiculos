@@ -101,11 +101,11 @@ namespace MantenimientoVehiculos.Web.Controllers
                 try
                 {
 
-                    var component = _context.Component.FirstOrDefaultAsync(f => f.Id.Equals(id)).Result;
-                    component.Name = componentEntity.Name.ToUpper();
-                    component.Code = componentEntity.Code.ToUpper();
-                    component.ModifiedDate = DateTime.UtcNow;
-                    _context.Update(component);
+                    // var component = _context.Component.FirstOrDefaultAsync(f => f.Id.Equals(id)).Result;
+                    componentEntity.Name = componentEntity.Name.ToUpper();
+                    componentEntity.Code = componentEntity.Code.ToUpper();
+                    componentEntity.ModifiedDate = DateTime.UtcNow;
+                    _context.Entry(componentEntity).State=EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

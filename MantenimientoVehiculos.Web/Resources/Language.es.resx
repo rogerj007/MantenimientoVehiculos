@@ -120,6 +120,9 @@
   <data name="Component" xml:space="preserve">
     <value>Componente</value>
   </data>
+  <data name="ComponentChangeMessage" xml:space="preserve">
+    <value>Componente a cambiar</value>
+  </data>
   <data name="ComponetDoesntExists" xml:space="preserve">
     <value>El componente no existe.</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Fecha de creación.</value>
+  </data>
+  <data name="ExecutedNextChange" xml:space="preserve">
+    <value>Siguiente cambio ejecutado</value>
   </data>
   <data name="Fuel" xml:space="preserve">
     <value>Combustible</value>
@@ -156,6 +162,9 @@
   <data name="ModifiedDate" xml:space="preserve">
     <value>Fecha de modificación.</value>
   </data>
+  <data name="NextChangeKmHr" xml:space="preserve">
+    <value>Siguiente cambio Km Hr</value>
+  </data>
   <data name="PasswordChangedSuccess" xml:space="preserve">
     <value>La contraseña fue cambiada con éxito!</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="Required_Message" xml:space="preserve">
     <value>El campo {0} es obligatorio.</value>
+  </data>
+  <data name="TTL" xml:space="preserve">
+    <value>Tiempo de Vida</value>
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>La usuario ya existe.</value>

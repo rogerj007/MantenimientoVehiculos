@@ -70,6 +70,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Component to change.
+        /// </summary>
+        public static string ComponentChangeMessage {
+            get {
+                return ResourceManager.GetString("ComponentChangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Component doesn&apos;t exists..
         /// </summary>
         public static string ComponetDoesntExists {
@@ -120,6 +129,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         public static string CreationDate {
             get {
                 return ResourceManager.GetString("CreationDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executed Next Change.
+        /// </summary>
+        public static string ExecutedNextChange {
+            get {
+                return ResourceManager.GetString("ExecutedNextChange", resourceCulture);
             }
         }
         
@@ -178,6 +196,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next Change Km Hr.
+        /// </summary>
+        public static string NextChangeKmHr {
+            get {
+                return ResourceManager.GetString("NextChangeKmHr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The password was changed successfully!.
         /// </summary>
         public static string PasswordChangedSuccess {
@@ -228,6 +255,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         public static string Required_Message {
             get {
                 return ResourceManager.GetString("Required_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time to Live.
+        /// </summary>
+        public static string TTL {
+            get {
+                return ResourceManager.GetString("TTL", resourceCulture);
             }
         }
         

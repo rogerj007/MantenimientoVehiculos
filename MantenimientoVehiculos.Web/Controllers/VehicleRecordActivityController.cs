@@ -1,33 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MantenimientoVehiculos.Web.Data;
 using MantenimientoVehiculos.Web.Data.Entities;
+using MantenimientoVehiculos.Web.Enums;
 using MantenimientoVehiculos.Web.Helpers;
 using MantenimientoVehiculos.Web.Models;
+using MantenimientoVehiculos.Web.Resources;
 
 namespace MantenimientoVehiculos.Web.Controllers
 {
-    public class VehicleRecordActivityController : Controller
+    public class VehicleRecordActivityController : BaseController
     {
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
 
         public VehicleRecordActivityController(DataContext context,
                                                 ICombosHelper combosHelper,
                                                 IConverterHelper converterHelper,
-                                                IUserHelper userHelper)
+                                                IUserHelper userHelper,
+                                                IMailHelper mailHelper)
         {
             _context = context;
             _combosHelper = combosHelper;
             _converterHelper = converterHelper;
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
         }
 
         // GET: VehicleRecordActivity
@@ -80,11 +87,73 @@ namespace MantenimientoVehiculos.Web.Controllers
             {
                 try
                 {
+
+                    var query =await _context.VehicleRecordActivities
+                        .Include(v => v.Vehicle)
+                        .Where(v => v.Vehicle.Id == model.VehicleId).ToListAsync();
+                    if (query.Any())
+                    {
+                        var max = query.Max(vv => vv.KmHr);
+                        if (model.KmHr < max)
+                        {
+                            var msjValidacion = $"El registro de Km o Hr no puede ser menor al ultimo ingresado {max}";
+                            model.Vehicles = _combosHelper.GetComboVehicles(true);
+                            ModelState.AddModelError(string.Empty, msjValidacion);
+                            return View(model);
+                        }
+                    }
+                  
+
                     var user = await _userHelper.GetUserAsync(User.Identity.Name);
+                    var allUser = await _userHelper.GetAllUserAsync();
+                    var userToMail= allUser.Where(u => u.UserType == UserType.Admin || u.UserType == UserType.Supervisor);
                     var vehicleRecordActivity = await _converterHelper.ToVehicleRecordActivityAsync(model);
                     vehicleRecordActivity.CreatedDate = DateTime.UtcNow;
-                    vehicleRecordActivity.ModifiedBy = user;
+                    vehicleRecordActivity.CreatedBy = user;
                     _context.Add(vehicleRecordActivity);
+
+
+                    //Register and Validation of each part or component
+
+                    var componetsToChange =await _context.VehicleMaintenanceDetail
+                                                    .Include(v => v.VehicleMaintenance)
+                                                    .Include(v=>v.VehicleMaintenance.Vehicle)
+                                                    .Include(c => c.Component)
+                                                    .Where(m => m.VehicleMaintenance.Vehicle.Id.Equals(model.VehicleId) && !m.ExecutedNextChange)
+                                                    .ToListAsync();
+                    
+                     var mensajeToMail = new StringBuilder();
+                    //var cultureInfo = new CultureInfo();
+                    var vehicle =await _context.Vehicle
+                                                .Include(v=>v.VehicleBrand)
+                                                .FirstAsync(v => v.Id.Equals(model.VehicleId));
+                    mensajeToMail.Append($"Vehicle: Brand: {vehicle.VehicleBrand.Name.ToUpper()} Plaque: {vehicle.Name.ToUpper()} <br>");
+                    foreach (var componet in componetsToChange)
+                    {
+                        if (componet.NextChangeKmHr < vehicleRecordActivity.KmHr)
+                        {
+                            mensajeToMail.Append($"{Language.ComponentChangeMessage}: {componet.Component.Name}<br>");
+                        }
+                        else
+                        {
+                            var alert = vehicleRecordActivity.KmHr - componet.NextChangeKmHr;
+                            if (alert < 100)
+                            {
+                                mensajeToMail.Append($"Next component change over 100: {componet.Component.Name}<br>");
+                            }
+                        }
+                    }
+
+                    foreach (var userMail in userToMail)
+                    {
+                        _mailHelper.SendMail(userMail.Email, "Report", mensajeToMail.ToString());
+                    }
+
+                  
+
+
+
+
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }

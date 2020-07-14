@@ -55,6 +55,13 @@ namespace MantenimientoVehiculos.Web.Helpers
             return await _userManager.UpdateAsync(user);
         }
 
+        public async Task<List<UserEntity>> GetAllUserAsync()
+        {
+            return await _context.Users.Where(u=>u.Enable)
+                .ToListAsync();
+
+        }
+
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {

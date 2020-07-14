@@ -11,7 +11,15 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         public override string Name { get; set; }
        
         public ComponentEntity Component { get; set; }
-        
+
+        [Display(Name = "NextChangeKmHr", ResourceType = typeof(Language))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        public long NextChangeKmHr { get; set; }
+
+        [Display(Name = "ExecutedNextChange", ResourceType = typeof(Language))]
+        [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
+        public bool ExecutedNextChange { get; set; }
+
         public VehicleMaintenanceEntity VehicleMaintenance { get; set; }
 }
 }

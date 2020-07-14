@@ -84,8 +84,11 @@ namespace MantenimientoVehiculos.Web.Helpers
         {
             var dto = _mapper.Map<VehicleMaintenanceDetailEntity>(model);
             dto.Id = isNew ? 0 : model.Id;
-            dto.VehicleMaintenance = await _context.VehicleMaintenance.FindAsync(model.VehicleMaintenanceId);
+            dto.VehicleMaintenance = await _context.VehicleMaintenance.Include(vm=>vm.Vehicle).FirstAsync(vm=>vm.Id.Equals(model.VehicleMaintenanceId));
             dto.Component = await _context.Component.FindAsync(model.ComponentId);
+            dto.ExecutedNextChange = false;
+            var next = dto.VehicleMaintenance.KmHrMaintenance + dto.Component.Ttl;
+            dto.NextChangeKmHr = next;
             return dto;
         }
 

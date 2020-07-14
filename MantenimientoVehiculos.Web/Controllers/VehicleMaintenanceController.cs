@@ -95,21 +95,14 @@ namespace MantenimientoVehiculos.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(VehicleMaintenanceViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-
-                var vehicleMantence = await _converterHelper.ToVehicleMaintenanceAsync(model);
-                var user = await _userHelper.GetUserAsync(User.Identity.Name);
-                vehicleMantence.CreatedDate = DateTime.UtcNow;
-                vehicleMantence.CreatedBy = user;
-                _context.Add(vehicleMantence);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-
-
-            return View(model);
+            if (!ModelState.IsValid) return View(model);
+            var vehicleMantence = await _converterHelper.ToVehicleMaintenanceAsync(model);
+            var user = await _userHelper.GetUserAsync(User.Identity.Name);
+            vehicleMantence.CreatedDate = DateTime.UtcNow;
+            vehicleMantence.CreatedBy = user;
+            _context.Add(vehicleMantence);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(long? id)
@@ -244,6 +237,17 @@ namespace MantenimientoVehiculos.Web.Controllers
                 md.CreatedBy = user;
                 md.CreatedDate = DateTime.UtcNow;
                 _context.Add(md);
+
+                //validate existing component in previous Maintenance
+                
+                var componentExistent =await _context.VehicleMaintenanceDetail
+                                                    .FirstOrDefaultAsync(c => c.Component.Id==md.Component.Id &&
+                                                                            c.VehicleMaintenance.Vehicle.Id==md.VehicleMaintenance.Vehicle.Id);
+
+                if (componentExistent != null)
+                {
+                    componentExistent.ExecutedNextChange = true;
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction($"{nameof(Details)}/{model.VehicleMaintenanceId}");
             }

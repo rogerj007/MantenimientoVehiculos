@@ -35,8 +35,8 @@ namespace MantenimientoVehiculos.Web.Models
 
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         [Display(Name = "Register as")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a User Funcion.")]
-        public int? UserFuncionId { get; set; }
+        [Range(1, byte.MaxValue, ErrorMessage = "You must select a User Funcion.")]
+        public byte? UserFuncionId { get; set; }
 
         public IEnumerable<SelectListItem> UserTypes { get; set; }
 

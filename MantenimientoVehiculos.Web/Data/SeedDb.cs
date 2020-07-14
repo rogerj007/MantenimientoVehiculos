@@ -57,9 +57,11 @@ namespace MantenimientoVehiculos.Web.Data
 
         private async Task CheckUsersAsync()
         {
-           await CheckUserAsync("1010", "Admin", "Web", "staric.richar@gmail.com", "0998585584", "Calle Luna Calle Sol",true, UserType.Admin);
-           //await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true,2, UserType.Supervisor);
-           //await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,3,UserType.User);
+           await CheckUserAsync("1010", "Richar", "Hernandez", "staric.richar@gmail.com", "0968947812", "Calle Luna Calle Sol",true, UserType.Admin);
+         //  await CheckUserAsync("1020", "Roger", "Jaimes", "rogerjh@mercapro.net", "0998585584", "Calle Luna Calle Sol", true, UserType.Supervisor);
+          // await CheckUserAsync("1030", "Oswaldo", "Jaimes", "rogerjh@diuniversalcheck.net", "0998585584", "Calle Luna Calle Sol", true, UserType.Supervisor);
+            //await CheckUserAsync("2020", "Cristian", "Rosado", "rogerjh@diuniversalcheck.com", "0998585584", "Calle Luna Calle Sol",true,2, UserType.Supervisor);
+            //await CheckUserAsync("3030", "Mauricio", "Torres", "rogerjh@rjrecords.com", "0998585584", "Calle Luna Calle Sol", true,3,UserType.User);
         }
 
         private async Task<UserEntity> CheckUserAsync(
@@ -105,16 +107,16 @@ namespace MantenimientoVehiculos.Web.Data
             if (!_dataContext.Component.Any())
             {
                 await _dataContext.Component.AddRangeAsync(
-                    new ComponentEntity { Name = "FILTRO TRAMPA DE AGUA",Code="xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO DE ACEITE", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO ACEITE HIDRAULICO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO DE AIRE", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO DE AIRE SECUNDARIO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE PRIMARIO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE SECUNDARIO", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO RACOR", Code = "xxxx", CreatedDate = DateTime.UtcNow },
-                    new ComponentEntity { Name = "FILTRO SECADOR", Code = "xxxx", CreatedDate = DateTime.UtcNow }
+                    new ComponentEntity { Name = "FILTRO TRAMPA DE AGUA",Code="xxxx",Ttl=5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO DE ACEITE", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO ACEITE HIDRAULICO", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO DE AIRE", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO DE AIRE SECUNDARIO", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE PRIMARIO", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO COMBUSTIBLE SECUNDARIO", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO RACOR", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow },
+                    new ComponentEntity { Name = "FILTRO SECADOR", Code = "xxxx", Ttl = 5000, CreatedDate = DateTime.UtcNow }
 
                 );
                 await _dataContext.SaveChangesAsync();
@@ -242,39 +244,5 @@ namespace MantenimientoVehiculos.Web.Data
 
         #endregion
 
-        private async Task CheckVehicleAsync()
-        {
-            if (!_dataContext.Vehicle.Any())
-            {
-                var users = await _dataContext.Users.ToListAsync() ;
-                var user = users.FirstOrDefault();
-                var vehicleStatus = _dataContext.VehicleStatus.FirstOrDefault();
-                var vehicleType = _dataContext.VehicleType.FirstOrDefault();
-                var vehicleBrand = _dataContext.VehicleBrand.FirstOrDefault();
-                var country = _dataContext.Country.FirstOrDefault();
-                var color = _dataContext.Color.FirstOrDefault();
-                var fuel = _dataContext.Fuel.FirstOrDefault();
-                await _dataContext.Vehicle.AddRangeAsync(
-                    new VehicleEntity
-                    {
-                        VehicleType= vehicleType,
-                        VehicleStatus=vehicleStatus,
-                        VehicleBrand=vehicleBrand,
-                        Country = country,
-                        Color=color, 
-                        Fuel=fuel,
-                        Name="XXX696",
-                        Chassis="XDXDXDXD",
-                        Year=2020,
-                        MotorSerial="ASDFGHJKL",
-                        Cylinder =1515,
-                        CreatedDate = DateTime.UtcNow,
-                        CreatedBy= user
-                    }
-                );
-                await _dataContext.SaveChangesAsync();
-
-            }
-        }
     }
 }

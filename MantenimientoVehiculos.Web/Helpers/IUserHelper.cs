@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MantenimientoVehiculos.Web.Data.Entities;
 using MantenimientoVehiculos.Web.Models;
@@ -36,7 +37,7 @@ namespace MantenimientoVehiculos.Web.Helpers
 
         Task<IdentityResult> UpdateUserAsync(UserEntity user);
 
-
+        Task<List<UserEntity>> GetAllUserAsync();
 
     }
 

@@ -10,7 +10,6 @@ namespace MantenimientoVehiculos.Web.Data.Entities
     {
 
         [Display(Name = "Fuel", ResourceType = typeof(Language))]
-        //[Required(ErrorMessage = "The field {0} is mandatory.")]
         [Required(ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.Required_Message))]
         [StringLength(50, MinimumLength = 2, ErrorMessageResourceType = typeof(Language), ErrorMessageResourceName = nameof(Language.MaxLength_Message))]
         [MaxLength(50)]
