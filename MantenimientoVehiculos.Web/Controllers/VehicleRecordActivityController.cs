@@ -113,6 +113,8 @@ namespace MantenimientoVehiculos.Web.Controllers
                     _context.Add(vehicleRecordActivity);
 
 
+
+
                     //Register and Validation of each part or component
 
                     var componetsToChange =await _context.VehicleMaintenanceDetail
@@ -123,10 +125,13 @@ namespace MantenimientoVehiculos.Web.Controllers
                                                     .ToListAsync();
                     
                      var mensajeToMail = new StringBuilder();
-                    //var cultureInfo = new CultureInfo();
+                    var cultureInfo = new CultureInfo("es-Ec");
+                    Language.Culture = cultureInfo;
                     var vehicle =await _context.Vehicle
                                                 .Include(v=>v.VehicleBrand)
                                                 .FirstAsync(v => v.Id.Equals(model.VehicleId));
+
+                    vehicle.KmHrActual = model.KmHr;
                     mensajeToMail.Append($"Vehicle: Brand: {vehicle.VehicleBrand.Name.ToUpper()} Plaque: {vehicle.Name.ToUpper()} <br>");
                     foreach (var componet in componetsToChange)
                     {
@@ -139,21 +144,15 @@ namespace MantenimientoVehiculos.Web.Controllers
                             var alert = vehicleRecordActivity.KmHr - componet.NextChangeKmHr;
                             if (alert < 100)
                             {
-                                mensajeToMail.Append($"Next component change over 100: {componet.Component.Name}<br>");
+                                mensajeToMail.Append($"{Language.ChangeOver100}: {componet.Component.Name}<br>");
                             }
                         }
                     }
 
                     foreach (var userMail in userToMail)
                     {
-                        _mailHelper.SendMail(userMail.Email, "Report", mensajeToMail.ToString());
+                        _mailHelper.SendMail(userMail.Email, $"{Language.Report}", mensajeToMail.ToString());
                     }
-
-                  
-
-
-
-
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }

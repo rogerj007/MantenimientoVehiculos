@@ -54,6 +54,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Year)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.KmHrActual)
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -96,6 +99,9 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Year)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.KmHrActual)
                                 </td>
                                 <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></a>

@@ -61,6 +61,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next component change in the next 100.
+        /// </summary>
+        public static string ChangeOver100 {
+            get {
+                return ResourceManager.GetString("ChangeOver100", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Component.
         /// </summary>
         public static string Component {
@@ -246,6 +255,15 @@ namespace MantenimientoVehiculos.Web.Resources {
         public static string RegisterActivity {
             get {
                 return ResourceManager.GetString("RegisterActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        public static string Report {
+            get {
+                return ResourceManager.GetString("Report", resourceCulture);
             }
         }
         

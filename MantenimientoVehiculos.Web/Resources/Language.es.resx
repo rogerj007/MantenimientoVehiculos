@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ChangeOver100" xml:space="preserve">
+    <value>Siguiente cambio de componentes en los proximos 100</value>
+  </data>
   <data name="Component" xml:space="preserve">
     <value>Componente</value>
   </data>
@@ -179,6 +182,9 @@
   </data>
   <data name="RegisterActivity" xml:space="preserve">
     <value>Registrar actividad 'Km / Horas'</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Reporte</value>
   </data>
   <data name="Required_Message" xml:space="preserve">
     <value>El campo {0} es obligatorio.</value>

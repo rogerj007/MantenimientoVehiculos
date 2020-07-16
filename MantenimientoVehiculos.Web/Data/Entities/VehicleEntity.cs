@@ -34,6 +34,9 @@ namespace MantenimientoVehiculos.Web.Data.Entities
         [Range(1980, int.MaxValue, ErrorMessage = "Year must be from 2000")]
         public short Year { get; set; }
 
+        [Display(Name = "Km - Hr Actual")]
+        public long KmHrActual { get; set; }
+
         //[Display(Name = "Vehicle Info")]
         //public string? VehicleInfoWithColor => $"{VehicleBrand.Name} {Name} - {Color.Name}";
 

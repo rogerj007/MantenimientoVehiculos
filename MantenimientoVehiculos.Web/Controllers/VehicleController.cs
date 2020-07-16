@@ -131,6 +131,7 @@ namespace MantenimientoVehiculos.Web.Controllers
                     vehicle.Name = vehicle.Name.ToUpper();
                     vehicle.Chassis = vehicle.Chassis.ToUpper();
                     vehicle.CreatedBy = user;
+                    vehicle.KmHrActual = 0;
                     vehicle.CreatedDate = DateTime.UtcNow;
                     _context.Add(vehicle);
                     await _context.SaveChangesAsync().ConfigureAwait(false);
